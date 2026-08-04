@@ -1,5 +1,5 @@
 import { useAnimatedNumber } from "@/hooks/useAnimatedNumber";
-import { formatCurrency } from "@/lib/currency";
+import { useCurrency } from "@/app/providers/CurrencyProvider";
 import { cn } from "@/lib/utils";
 
 interface AnimatedCurrencyProps {
@@ -9,5 +9,6 @@ interface AnimatedCurrencyProps {
 
 export function AnimatedCurrency({ value, className }: AnimatedCurrencyProps) {
   const animated = useAnimatedNumber(value);
+  const { formatCurrency } = useCurrency();
   return <span className={cn("font-mono tabular", className)}>{formatCurrency(animated)}</span>;
 }

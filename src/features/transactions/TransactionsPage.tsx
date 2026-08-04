@@ -3,7 +3,7 @@ import { Topbar } from "@/components/layout/Topbar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import { formatSignedCurrency } from "@/lib/currency";
+import { useCurrency } from "@/app/providers/CurrencyProvider";
 import { getCategoryIconByKey } from "@/lib/category-icons";
 import { cn } from "@/lib/utils";
 import { useDeleteTransaction, useTransactions } from "./hooks";
@@ -20,6 +20,7 @@ function formatDate(iso: string) {
 export function TransactionsPage() {
   const { data: transactions = [], isLoading } = useTransactions();
   const deleteTransaction = useDeleteTransaction();
+  const { formatSignedCurrency } = useCurrency();
 
   return (
     <>

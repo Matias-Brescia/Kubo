@@ -8,7 +8,8 @@ import {
   CartesianGrid,
 } from "recharts";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { formatCompactNumber, formatCurrency } from "@/lib/currency";
+import { formatCompactNumber } from "@/lib/currency";
+import { useCurrency } from "@/app/providers/CurrencyProvider";
 import type { TrendPoint } from "../types";
 
 function ChartTooltip({
@@ -20,6 +21,7 @@ function ChartTooltip({
   payload?: { value: number; dataKey: string }[];
   label?: string;
 }) {
+  const { formatCurrency } = useCurrency();
   if (!active || !payload?.length) return null;
   return (
     <div className="rounded-kubo-sm border border-border bg-surface px-3 py-2 text-xs shadow-kubo-lg">

@@ -1,4 +1,5 @@
 export type TransactionKind = "income" | "expense";
+export type RecurringFrequency = "weekly" | "monthly" | "yearly";
 export type CategoryKind = "income" | "expense" | "both";
 
 export interface Database {
@@ -120,6 +121,41 @@ export interface Database {
           target_amount?: number;
           current_amount?: number;
           target_date?: string | null;
+        };
+        Relationships: [];
+      };
+      recurring_transactions: {
+        Row: {
+          id: string;
+          user_id: string;
+          category_id: string | null;
+          description: string;
+          amount: number;
+          kind: TransactionKind;
+          frequency: RecurringFrequency;
+          next_occurrence: string;
+          is_active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          category_id?: string | null;
+          description: string;
+          amount: number;
+          kind: TransactionKind;
+          frequency: RecurringFrequency;
+          next_occurrence: string;
+          is_active?: boolean;
+        };
+        Update: {
+          category_id?: string | null;
+          description?: string;
+          amount?: number;
+          kind?: TransactionKind;
+          frequency?: RecurringFrequency;
+          next_occurrence?: string;
+          is_active?: boolean;
         };
         Relationships: [];
       };

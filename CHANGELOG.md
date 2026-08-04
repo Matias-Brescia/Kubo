@@ -4,6 +4,14 @@ Historial de versiones del proyecto, de la más reciente a la más antigua. Cada
 
 ---
 
+## v0.4
+
+- **Multi-moneda** — soporte para 7 monedas (PEN, USD, EUR, MXN, COP, CLP, ARS), configurable desde Ajustes; todos los montos de la app se formatean según la moneda elegida
+- **Ajustes de cuenta** — sección Perfil (nombre, moneda), Seguridad (cambio de email/contraseña) y Zona de peligro (eliminar cuenta, con función `delete_own_account` en Supabase)
+- **Onboarding** — modal de bienvenida para cuentas nuevas sin transacciones, con los 3 pasos clave de la app
+- **Alertas de presupuesto** — aviso en el Dashboard cuando algún presupuesto llega al 80% o se excede, con enlace directo a Presupuestos
+- **Movimientos recurrentes** — sueldos, suscripciones y cualquier gasto/ingreso que se repite (semanal, mensual, anual); se generan automáticamente al abrir la app cuando ya vencieron
+
 ## v0.3
 
 - **Presupuestos** — límite mensual por categoría, con barra de progreso calculada contra el gasto real del mes en curso y estado "excedido" en rojo terracota

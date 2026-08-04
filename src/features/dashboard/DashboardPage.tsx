@@ -5,11 +5,14 @@ import { BalanceCard } from "./components/BalanceCard";
 import { StatCard } from "./components/StatCard";
 import { SpendingChart } from "./components/SpendingChart";
 import { TransactionList } from "./components/TransactionList";
+import { BudgetAlertBanner } from "./components/BudgetAlertBanner";
 import { TransactionFormDialog } from "@/features/transactions/components/TransactionFormDialog";
 import { useTransactions } from "@/features/transactions/hooks";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { computeDashboardStats } from "./utils/stats";
-import { formatCurrency } from "@/lib/currency";
+import { useCurrency } from "@/app/providers/CurrencyProvider";
+import { useOnboarding } from "@/features/onboarding/useOnboarding";
+import { OnboardingDialog } from "@/features/onboarding/OnboardingDialog";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -21,7 +24,9 @@ function getGreeting() {
 export function DashboardPage() {
   const { user } = useAuth();
   const { data: transactions = [], isLoading } = useTransactions();
+  const { formatCurrency } = useCurrency();
   const stats = computeDashboardStats(transactions);
+  const onboarding = useOnboarding(transactions.length > 0);
 
   const firstName = (user?.user_metadata?.full_name as string | undefined)?.split(" ")[0];
 
@@ -35,13 +40,19 @@ export function DashboardPage() {
 
   return (
     <>
+      <OnboardingDialog open={onboarding.open} onDismiss={onboarding.dismiss} />
+
       <Topbar
         title={`${getGreeting()}${firstName ? `, ${firstName}` : ""}`}
         subtitle="Así está tu dinero hoy."
         action={<TransactionFormDialog />}
       />
 
-      <div className="mt-6 grid animate-fade-up gap-5 px-6 md:mt-8 md:grid-cols-3 md:px-10">
+      <div className="mt-6 px-6 md:mt-8 md:px-10">
+        <BudgetAlertBanner />
+      </div>
+
+      <div className="mt-4 grid animate-fade-up gap-5 px-6 md:grid-cols-3 md:px-10">
         <div className="md:col-span-2">
           <BalanceCard
             balance={stats.balance}

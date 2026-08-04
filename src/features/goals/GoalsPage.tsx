@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { AnimatedCurrency } from "@/components/shared/AnimatedCurrency";
-import { formatCurrency } from "@/lib/currency";
+import { useCurrency } from "@/app/providers/CurrencyProvider";
 import { getCategoryIconByKey } from "@/lib/category-icons";
 import { useGoals, useDeleteGoal } from "./hooks";
 import { GoalFormDialog } from "./components/GoalFormDialog";
@@ -21,6 +21,7 @@ function formatDate(iso: string) {
 export function GoalsPage() {
   const { data: goals = [], isLoading } = useGoals();
   const deleteGoal = useDeleteGoal();
+  const { formatCurrency } = useCurrency();
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { formatSignedCurrency } from "@/lib/currency";
+import { useCurrency } from "@/app/providers/CurrencyProvider";
 import { cn } from "@/lib/utils";
 import { getCategoryIconByKey } from "@/lib/category-icons";
 import type { Transaction } from "@/features/transactions/hooks";
@@ -12,6 +12,7 @@ function formatDate(iso: string) {
 }
 
 export function TransactionList({ transactions }: { transactions: Transaction[] }) {
+  const { formatSignedCurrency } = useCurrency();
   return (
     <Card>
       <CardHeader>

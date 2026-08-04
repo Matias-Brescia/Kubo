@@ -1,9 +1,10 @@
 -- ============================================================
--- Kubo v0.3 — Esquema de base de datos
+-- Kubo v0.4 — Esquema de base de datos
 -- Ejecuta este archivo completo en el SQL Editor de tu proyecto
 -- de Supabase (Project > SQL Editor > New query > Run).
--- Si ya ejecutaste la versión v0.2, solo necesitas correr desde
--- la sección "Tabla: budgets" en adelante (usa `if not exists`).
+-- Es incremental respecto a versiones anteriores (usa
+-- `if not exists` / `create or replace`), así que puedes volver
+-- a correr el archivo completo sin duplicar nada.
 -- ============================================================
 
 -- Extensión necesaria para gen_random_uuid()
@@ -96,15 +97,6 @@ create policy "Los usuarios eliminan sus propias transacciones"
   on public.transactions for delete
   using (auth.uid() = user_id);
 
-create index if not exists transactions_user_date_idx
-  on public.transactions (user_id, occurred_on desc);
-
-create index if not exists budgets_user_idx
-  on public.budgets (user_id);
-
-create index if not exists goals_user_idx
-  on public.goals (user_id);
-
 -- ------------------------------------------------------------
 -- Tabla: budgets
 -- Un límite mensual por categoría (recurrente, sin fecha fija:
@@ -173,6 +165,57 @@ create policy "Los usuarios eliminan sus propias metas"
   on public.goals for delete
   using (auth.uid() = user_id);
 
+create index if not exists transactions_user_date_idx
+  on public.transactions (user_id, occurred_on desc);
+
+create index if not exists budgets_user_idx
+  on public.budgets (user_id);
+
+create index if not exists goals_user_idx
+  on public.goals (user_id);
+
+-- ------------------------------------------------------------
+-- Tabla: recurring_transactions
+-- Plantillas de movimientos que se repiten (sueldo, alquiler,
+-- suscripciones). `next_occurrence` avanza cada vez que el
+-- cliente genera la transacción real correspondiente (ver
+-- `useRunDueRecurringTransactions` en el frontend) — no depende
+-- de un cron en el servidor.
+-- ------------------------------------------------------------
+create table if not exists public.recurring_transactions (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  category_id uuid references public.categories (id) on delete set null,
+  description text not null,
+  amount numeric(12, 2) not null check (amount > 0),
+  kind text not null check (kind in ('income', 'expense')),
+  frequency text not null check (frequency in ('weekly', 'monthly', 'yearly')),
+  next_occurrence date not null,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
+alter table public.recurring_transactions enable row level security;
+
+create policy "Los usuarios ven sus propios recurrentes"
+  on public.recurring_transactions for select
+  using (auth.uid() = user_id);
+
+create policy "Los usuarios crean sus propios recurrentes"
+  on public.recurring_transactions for insert
+  with check (auth.uid() = user_id);
+
+create policy "Los usuarios editan sus propios recurrentes"
+  on public.recurring_transactions for update
+  using (auth.uid() = user_id);
+
+create policy "Los usuarios eliminan sus propios recurrentes"
+  on public.recurring_transactions for delete
+  using (auth.uid() = user_id);
+
+create index if not exists recurring_transactions_user_idx
+  on public.recurring_transactions (user_id);
+
 -- ------------------------------------------------------------
 -- Trigger: al crear un usuario nuevo, se crea su perfil y se
 -- siembran las categorías por defecto.
@@ -205,3 +248,23 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- ------------------------------------------------------------
+-- Función: delete_own_account
+-- Permite que un usuario autenticado elimine su propia cuenta
+-- (perfil, categorías, transacciones, presupuestos y metas se
+-- eliminan en cascada por las FKs; el registro en auth.users se
+-- borra al final). Nunca puede borrar la cuenta de otra persona:
+-- siempre opera sobre auth.uid().
+-- ------------------------------------------------------------
+create or replace function public.delete_own_account()
+returns void
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  delete from auth.users where id = auth.uid();
+end;
+$$;
+
+grant execute on function public.delete_own_account() to authenticated;

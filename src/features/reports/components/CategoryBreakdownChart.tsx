@@ -1,6 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { formatCompactNumber, formatCurrency } from "@/lib/currency";
+import { formatCompactNumber } from "@/lib/currency";
+import { useCurrency } from "@/app/providers/CurrencyProvider";
 import { getCategoryIconByKey } from "@/lib/category-icons";
 import type { CategoryBreakdownItem } from "../utils";
 
@@ -20,6 +21,7 @@ function BreakdownTooltip({
   active?: boolean;
   payload?: { payload: CategoryBreakdownItem }[];
 }) {
+  const { formatCurrency } = useCurrency();
   if (!active || !payload?.length) return null;
   const item = payload[0].payload;
   return (
@@ -31,6 +33,7 @@ function BreakdownTooltip({
 }
 
 export function CategoryBreakdownChart({ data }: { data: CategoryBreakdownItem[] }) {
+  const { formatCurrency } = useCurrency();
   return (
     <Card>
       <CardHeader>

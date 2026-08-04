@@ -1,6 +1,7 @@
 import {
   LayoutGrid,
   ArrowLeftRight,
+  Repeat,
   Tags,
   PiggyBank,
   Target,
@@ -18,6 +19,7 @@ export interface NavItem {
 export const navItems: NavItem[] = [
   { label: "Dashboard", path: "/", icon: LayoutGrid },
   { label: "Transacciones", path: "/transacciones", icon: ArrowLeftRight },
+  { label: "Recurrentes", path: "/recurrentes", icon: Repeat },
   { label: "Categorías", path: "/categorias", icon: Tags },
   { label: "Presupuestos", path: "/presupuestos", icon: PiggyBank },
   { label: "Metas", path: "/metas", icon: Target },
@@ -28,5 +30,4 @@ export const settingsItem: NavItem = {
   label: "Ajustes",
   path: "/ajustes",
   icon: Settings,
-  comingSoon: true,
 };

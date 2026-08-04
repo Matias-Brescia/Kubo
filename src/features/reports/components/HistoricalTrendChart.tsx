@@ -1,6 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { formatCompactNumber, formatCurrency } from "@/lib/currency";
+import { formatCompactNumber } from "@/lib/currency";
+import { useCurrency } from "@/app/providers/CurrencyProvider";
 import type { HistoricalPoint } from "../utils";
 
 function HistoricalTooltip({
@@ -12,6 +13,7 @@ function HistoricalTooltip({
   payload?: { value: number; dataKey: string }[];
   label?: string;
 }) {
+  const { formatCurrency } = useCurrency();
   if (!active || !payload?.length) return null;
   const labels: Record<string, string> = {
     income: "Ingresos",

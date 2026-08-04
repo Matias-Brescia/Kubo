@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { AnimatedCurrency } from "@/components/shared/AnimatedCurrency";
-import { formatCurrency } from "@/lib/currency";
+import { useCurrency } from "@/app/providers/CurrencyProvider";
+import { Badge } from "@/components/ui/badge";
 import { getCategoryIconByKey } from "@/lib/category-icons";
 import { cn } from "@/lib/utils";
 import { useTransactions } from "@/features/transactions/hooks";
@@ -18,6 +19,7 @@ export function BudgetsPage() {
   const { data: budgets = [], isLoading } = useBudgets();
   const { data: transactions = [] } = useTransactions();
   const deleteBudget = useDeleteBudget();
+  const { formatCurrency } = useCurrency();
 
   const spentByCategory = computeMonthSpentByCategory(transactions);
   const usedCategoryIds = budgets.map((b) => b.categoryId);
@@ -116,11 +118,16 @@ export function BudgetsPage() {
                             value={spent}
                             className={cn("font-medium", isOver && "text-negative")}
                           />
-                          <span className={cn("text-muted", isOver && "text-negative")}>
-                            {isOver
-                              ? `Excedido por ${formatCurrency(Math.abs(remaining))}`
-                              : `Quedan ${formatCurrency(remaining)}`}
-                          </span>
+                          <div className="flex items-center gap-2">
+                            {(isOver || pct >= 80) && (
+                              <Badge variant="negative">{isOver ? "Excedido" : "80%+"}</Badge>
+                            )}
+                            <span className={cn("text-muted", isOver && "text-negative")}>
+                              {isOver
+                                ? `Excedido por ${formatCurrency(Math.abs(remaining))}`
+                                : `Quedan ${formatCurrency(remaining)}`}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </Card>

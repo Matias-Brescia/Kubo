@@ -86,18 +86,15 @@ pnpm preview
 ```
 
 > **Nota:** si abres el proyecto sin configurar `.env`, Kubo muestra una pantalla con instrucciones en vez de fallar en blanco.
-## Novedades de esta versión — v0.3
+## Novedades de esta versión — v0.4
 
-- **Presupuestos** — límite mensual por categoría, con barra de progreso calculada contra el gasto real del mes en curso y estado "excedido" en rojo terracota
-- **Metas de ahorro** — objetivo con ícono elegible, fecha objetivo opcional, y diálogo de aporte/retiro
-- **Reportes** — desglose de gasto por categoría, histórico de 6 meses (ingresos/gastos/ahorro neto), y exportación a CSV
-- Rutas y navegación reales para Presupuestos/Metas/Reportes (ya no muestran "próximamente")
-- Code-splitting con `React.lazy` + `Suspense` — todas las páginas salvo el Dashboard cargan bajo demanda, reduciendo el bundle inicial
-- Números animados (`useAnimatedNumber` / `AnimatedCurrency`) en Dashboard, Presupuestos y Metas
-- Todo lo de v0.1 y v0.2 se mantiene
-
-> **Nota conocida:** el aporte/retiro de Metas actualiza `current_amount` con lectura-luego-escritura, no con un incremento atómico en base de datos. Para un solo usuario no debería causar problemas, pero dos aportes muy seguidos podrían pisarse entre sí.
+- **Multi-moneda** — soporte para 7 monedas (PEN, USD, EUR, MXN, COP, CLP, ARS), configurable desde Ajustes; todos los montos de la app se formatean según la moneda elegida
+- **Ajustes de cuenta** — sección Perfil (nombre, moneda), Seguridad (cambio de email/contraseña) y Zona de peligro (eliminar cuenta, con función `delete_own_account` en Supabase)
+- **Onboarding** — modal de bienvenida para cuentas nuevas sin transacciones, con los 3 pasos clave de la app
+- **Alertas de presupuesto** — aviso en el Dashboard cuando algún presupuesto llega al 80% o se excede, con enlace directo a Presupuestos
+- **Movimientos recurrentes** — sueldos, suscripciones y cualquier gasto/ingreso que se repite (semanal, mensual, anual); se generan automáticamente al abrir la app cuando ya vencieron
+- Todo lo de v0.1, v0.2 y v0.3 se mantiene
 
 ## Próximas entregas
 
-- **v0.4** — Ajustes de cuenta, multi-moneda, onboarding, alertas de presupuesto, movimientos recurrentes.
+- **v0.5** — Refresh de UX/UI: nueva paleta, sistema de componentes, rediseño de todas las pantallas.
