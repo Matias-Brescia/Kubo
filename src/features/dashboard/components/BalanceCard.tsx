@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { formatCurrency } from "@/lib/currency";
+import { AnimatedCurrency } from "@/components/shared/AnimatedCurrency";
 import { cn } from "@/lib/utils";
 
 interface BalanceCardProps {
@@ -18,14 +18,17 @@ export function BalanceCard({ balance, income, expense }: BalanceCardProps) {
         className="pointer-events-none absolute -right-24 -top-24 size-64 rounded-full bg-accent/10 blur-3xl"
       />
       <p className="text-sm font-medium text-muted">Balance total</p>
-      <motion.p
+      <motion.div
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="mt-2 font-mono text-4xl font-semibold tracking-tight tabular md:text-5xl"
+        className="mt-2"
       >
-        {formatCurrency(balance)}
-      </motion.p>
+        <AnimatedCurrency
+          value={balance}
+          className="text-4xl font-semibold tracking-tight md:text-5xl"
+        />
+      </motion.div>
 
       <div className="mt-6 flex flex-wrap gap-3">
         <Metric
@@ -68,8 +71,9 @@ function Metric({
       </div>
       <div>
         <p className="text-[11px] text-muted">{label}</p>
-        <p className="font-mono text-sm font-medium tabular">{formatCurrency(value)}</p>
+        <AnimatedCurrency value={value} className="text-sm font-medium" />
       </div>
     </div>
   );
 }
+

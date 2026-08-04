@@ -86,19 +86,18 @@ pnpm preview
 ```
 
 > **Nota:** si abres el proyecto sin configurar `.env`, Kubo muestra una pantalla con instrucciones en vez de fallar en blanco.
-## Novedades de esta versión — v0.2
+## Novedades de esta versión — v0.3
 
-- Login y registro con Supabase Auth (email + contraseña), confirmación por correo
-- Rutas protegidas — el dashboard y sus secciones requieren sesión activa
-- Base de datos real en PostgreSQL vía Supabase, con Row Level Security (cada usuario solo ve y edita sus propios datos)
-- CRUD completo de transacciones — crear, editar, eliminar, con categoría y tipo (ingreso/gasto)
-- CRUD de categorías — categorías por defecto sembradas al registrarte, más las que tú crees
-- Persistencia real — todo lo que registras sobrevive a un refresh, un logout, o abrir Kubo en otro dispositivo
-- Dashboard conectado a datos reales — balance, ahorro del mes, mayor categoría de gasto y tendencia de 6 meses se calculan a partir de tus transacciones reales
-- Sidebar con tu correo y botón de cerrar sesión
-- Todo lo de v0.1 se mantiene: diseño, modo oscuro/claro, responsive
-- Presupuestos, Metas y Reportes siguen enlazados en la navegación con una pantalla "próximamente"
+- **Presupuestos** — límite mensual por categoría, con barra de progreso calculada contra el gasto real del mes en curso y estado "excedido" en rojo terracota
+- **Metas de ahorro** — objetivo con ícono elegible, fecha objetivo opcional, y diálogo de aporte/retiro
+- **Reportes** — desglose de gasto por categoría, histórico de 6 meses (ingresos/gastos/ahorro neto), y exportación a CSV
+- Rutas y navegación reales para Presupuestos/Metas/Reportes (ya no muestran "próximamente")
+- Code-splitting con `React.lazy` + `Suspense` — todas las páginas salvo el Dashboard cargan bajo demanda, reduciendo el bundle inicial
+- Números animados (`useAnimatedNumber` / `AnimatedCurrency`) en Dashboard, Presupuestos y Metas
+- Todo lo de v0.1 y v0.2 se mantiene
+
+> **Nota conocida:** el aporte/retiro de Metas actualiza `current_amount` con lectura-luego-escritura, no con un incremento atómico en base de datos. Para un solo usuario no debería causar problemas, pero dos aportes muy seguidos podrían pisarse entre sí.
 
 ## Próximas entregas
 
-- **v0.3** — Presupuestos por categoría, metas de ahorro, reportes, animaciones adicionales, optimización de performance (code-splitting del bundle).
+- **v0.4** — Ajustes de cuenta, multi-moneda, onboarding, alertas de presupuesto, movimientos recurrentes.

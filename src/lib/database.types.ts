@@ -74,6 +74,55 @@ export interface Database {
         };
         Relationships: [];
       };
+      budgets: {
+        Row: {
+          id: string;
+          user_id: string;
+          category_id: string;
+          monthly_amount: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          category_id: string;
+          monthly_amount: number;
+        };
+        Update: {
+          category_id?: string;
+          monthly_amount?: number;
+        };
+        Relationships: [];
+      };
+      goals: {
+        Row: {
+          id: string;
+          user_id: string;
+          name: string;
+          icon: string;
+          target_amount: number;
+          current_amount: number;
+          target_date: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          name: string;
+          icon?: string;
+          target_amount: number;
+          current_amount?: number;
+          target_date?: string | null;
+        };
+        Update: {
+          name?: string;
+          icon?: string;
+          target_amount?: number;
+          current_amount?: number;
+          target_date?: string | null;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

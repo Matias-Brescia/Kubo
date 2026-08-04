@@ -4,6 +4,17 @@ Historial de versiones del proyecto, de la más reciente a la más antigua. Cada
 
 ---
 
+## v0.3
+
+- **Presupuestos** — límite mensual por categoría, con barra de progreso calculada contra el gasto real del mes en curso y estado "excedido" en rojo terracota
+- **Metas de ahorro** — objetivo con ícono elegible, fecha objetivo opcional, y diálogo de aporte/retiro
+- **Reportes** — desglose de gasto por categoría, histórico de 6 meses (ingresos/gastos/ahorro neto), y exportación a CSV
+- Rutas y navegación reales para Presupuestos/Metas/Reportes (ya no muestran "próximamente")
+- Code-splitting con `React.lazy` + `Suspense` — todas las páginas salvo el Dashboard cargan bajo demanda, reduciendo el bundle inicial
+- Números animados (`useAnimatedNumber` / `AnimatedCurrency`) en Dashboard, Presupuestos y Metas
+
+> **Nota conocida desde esta versión:** el aporte/retiro de Metas actualiza `current_amount` con lectura-luego-escritura, no con un incremento atómico en base de datos. Para un solo usuario no debería causar problemas, pero dos aportes muy seguidos podrían pisarse entre sí.
+
 ## v0.2
 
 - Login y registro con Supabase Auth (email + contraseña), confirmación por correo

@@ -1,7 +1,9 @@
 -- ============================================================
--- Kubo v0.2 — Esquema de base de datos
+-- Kubo v0.3 — Esquema de base de datos
 -- Ejecuta este archivo completo en el SQL Editor de tu proyecto
 -- de Supabase (Project > SQL Editor > New query > Run).
+-- Si ya ejecutaste la versión v0.2, solo necesitas correr desde
+-- la sección "Tabla: budgets" en adelante (usa `if not exists`).
 -- ============================================================
 
 -- Extensión necesaria para gen_random_uuid()
@@ -96,6 +98,80 @@ create policy "Los usuarios eliminan sus propias transacciones"
 
 create index if not exists transactions_user_date_idx
   on public.transactions (user_id, occurred_on desc);
+
+create index if not exists budgets_user_idx
+  on public.budgets (user_id);
+
+create index if not exists goals_user_idx
+  on public.goals (user_id);
+
+-- ------------------------------------------------------------
+-- Tabla: budgets
+-- Un límite mensual por categoría (recurrente, sin fecha fija:
+-- aplica a "el mes en curso" cada mes). Una sola fila por
+-- categoría y usuario.
+-- ------------------------------------------------------------
+create table if not exists public.budgets (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  category_id uuid not null references public.categories (id) on delete cascade,
+  monthly_amount numeric(12, 2) not null check (monthly_amount > 0),
+  created_at timestamptz not null default now(),
+  unique (user_id, category_id)
+);
+
+alter table public.budgets enable row level security;
+
+create policy "Los usuarios ven sus propios presupuestos"
+  on public.budgets for select
+  using (auth.uid() = user_id);
+
+create policy "Los usuarios crean sus propios presupuestos"
+  on public.budgets for insert
+  with check (auth.uid() = user_id);
+
+create policy "Los usuarios editan sus propios presupuestos"
+  on public.budgets for update
+  using (auth.uid() = user_id);
+
+create policy "Los usuarios eliminan sus propios presupuestos"
+  on public.budgets for delete
+  using (auth.uid() = user_id);
+
+-- ------------------------------------------------------------
+-- Tabla: goals
+-- Metas de ahorro. `current_amount` se actualiza directamente
+-- (sin tabla de contribuciones aparte) cada vez que el usuario
+-- registra un aporte o un retiro.
+-- ------------------------------------------------------------
+create table if not exists public.goals (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  name text not null,
+  icon text not null default 'target',
+  target_amount numeric(12, 2) not null check (target_amount > 0),
+  current_amount numeric(12, 2) not null default 0 check (current_amount >= 0),
+  target_date date,
+  created_at timestamptz not null default now()
+);
+
+alter table public.goals enable row level security;
+
+create policy "Los usuarios ven sus propias metas"
+  on public.goals for select
+  using (auth.uid() = user_id);
+
+create policy "Los usuarios crean sus propias metas"
+  on public.goals for insert
+  with check (auth.uid() = user_id);
+
+create policy "Los usuarios editan sus propias metas"
+  on public.goals for update
+  using (auth.uid() = user_id);
+
+create policy "Los usuarios eliminan sus propias metas"
+  on public.goals for delete
+  using (auth.uid() = user_id);
 
 -- ------------------------------------------------------------
 -- Trigger: al crear un usuario nuevo, se crea su perfil y se

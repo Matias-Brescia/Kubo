@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { formatCurrency } from "@/lib/currency";
+import { AnimatedCurrency } from "@/components/shared/AnimatedCurrency";
 
 interface StatCardProps {
   icon: LucideIcon;
@@ -18,7 +18,7 @@ export function StatCard({ icon: Icon, label, value, helper }: StatCardProps) {
         </div>
         <p className="text-sm font-medium text-muted">{label}</p>
       </div>
-      <p className="mt-3 font-mono text-2xl font-semibold tabular">{formatCurrency(value)}</p>
+      <AnimatedCurrency value={value} className="mt-3 text-2xl font-semibold" />
       {helper && <p className="mt-2 text-xs text-muted">{helper}</p>}
     </Card>
   );
