@@ -1,0 +1,101 @@
+@import "@fontsource/geist-sans/latin-400.css";
+@import "@fontsource/geist-sans/latin-500.css";
+@import "@fontsource/geist-sans/latin-600.css";
+@import "@fontsource/geist-mono/latin-400.css";
+@import "@fontsource/geist-mono/latin-500.css";
+@import "@fontsource/geist-mono/latin-600.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 228 10% 6%;
+  --surface: 228 9% 10%;
+  --surface-hover: 228 8% 13%;
+  --border: 228 8% 17%;
+  --foreground: 60 5% 93%;
+  --muted: 228 6% 58%;
+  --accent: 96 20% 55%;
+  --accent-foreground: 228 10% 6%;
+  --accent-soft: 96 20% 55%;
+  --negative: 4 40% 58%;
+  --negative-soft: 4 40% 58%;
+  --ring: 96 20% 55%;
+}
+
+.light {
+  --bg: 60 20% 98%;
+  --surface: 0 0% 100%;
+  --surface-hover: 60 12% 95%;
+  --border: 60 10% 89%;
+  --foreground: 228 10% 10%;
+  --muted: 228 6% 42%;
+  --accent: 96 28% 34%;
+  --accent-foreground: 60 20% 98%;
+  --accent-soft: 96 28% 34%;
+  --negative: 4 48% 42%;
+  --negative-soft: 4 48% 42%;
+  --ring: 96 28% 34%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-bg text-foreground antialiased;
+  font-family: "Geist Sans", system-ui, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.font-mono,
+.tabular {
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-feature-settings: "tnum" 1, "cv01" 1;
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: hsl(var(--accent) / 0.25);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted) / 0.4);
+}
+
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
