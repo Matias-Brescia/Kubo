@@ -1,3 +1,4 @@
+import { parseLocalIso } from "@/lib/date";
 import type { Transaction } from "@/features/transactions/hooks";
 import type { TrendPoint } from "../types";
 
@@ -7,7 +8,7 @@ const monthLabels = [
 ];
 
 function isSameMonth(iso: string, date: Date) {
-  const d = new Date(iso);
+  const d = parseLocalIso(iso);
   return d.getFullYear() === date.getFullYear() && d.getMonth() === date.getMonth();
 }
 

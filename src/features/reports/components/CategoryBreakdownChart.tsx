@@ -2,17 +2,9 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { formatCompactNumber } from "@/lib/currency";
 import { useCurrency } from "@/app/providers/CurrencyProvider";
-import { getCategoryIconByKey } from "@/lib/category-icons";
+import { getCategoryIconByKey, getCategoryColorByKey, getCategoryCssColorByKey } from "@/lib/category-icons";
+import { cn } from "@/lib/utils";
 import type { CategoryBreakdownItem } from "../utils";
-
-const palette = [
-  "hsl(var(--accent))",
-  "hsl(var(--negative))",
-  "hsl(96 20% 65%)",
-  "hsl(4 40% 68%)",
-  "hsl(228 6% 58%)",
-  "hsl(96 20% 45%)",
-];
 
 function BreakdownTooltip({
   active,
@@ -25,9 +17,9 @@ function BreakdownTooltip({
   if (!active || !payload?.length) return null;
   const item = payload[0].payload;
   return (
-    <div className="rounded-kubo-sm border border-border bg-surface px-3 py-2 text-xs shadow-kubo-lg">
-      <p className="font-medium">{item.name}</p>
-      <p className="font-mono tabular-nums">{formatCurrency(item.amount)}</p>
+    <div className="rounded-kubo-sm border border-border bg-surface px-3 py-2.5 text-xs shadow-kubo-lg">
+      <p className="mb-1 font-semibold text-foreground">{item.name}</p>
+      <p className="font-mono tabular-nums text-muted">{formatCurrency(item.amount)}</p>
     </div>
   );
 }
@@ -38,7 +30,7 @@ export function CategoryBreakdownChart({ data }: { data: CategoryBreakdownItem[]
     <Card>
       <CardHeader>
         <CardTitle>Gasto por categoría</CardTitle>
-        <p className="mt-1 text-sm font-medium">Mes en curso</p>
+        <p className="mt-1 text-sm text-muted">Mes en curso</p>
       </CardHeader>
       <CardContent className="pl-0 pt-4">
         {data.length === 0 ? (
@@ -69,9 +61,9 @@ export function CategoryBreakdownChart({ data }: { data: CategoryBreakdownItem[]
                   tick={{ fill: "hsl(var(--foreground))", fontSize: 12 }}
                 />
                 <Tooltip content={<BreakdownTooltip />} cursor={{ fill: "hsl(var(--surface-hover))" }} />
-                <Bar dataKey="amount" radius={[0, 6, 6, 0]} maxBarSize={22}>
-                  {data.map((entry, i) => (
-                    <Cell key={entry.name} fill={palette[i % palette.length]} />
+                <Bar dataKey="amount" radius={[0, 6, 6, 0]} maxBarSize={22} animationDuration={200}>
+                  {data.map((entry) => (
+                    <Cell key={entry.name} fill={getCategoryCssColorByKey(entry.icon)} />
                   ))}
                 </Bar>
               </BarChart>
@@ -86,7 +78,7 @@ export function CategoryBreakdownChart({ data }: { data: CategoryBreakdownItem[]
             return (
               <div key={item.name} className="flex items-center gap-2.5 text-sm">
                 <div className="flex size-8 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover">
-                  <Icon className="size-4 text-muted" />
+                  <Icon className={cn("size-4", getCategoryColorByKey(item.icon))} />
                 </div>
                 <span className="flex-1 truncate">{item.name}</span>
                 <span className="font-mono tabular-nums text-muted">{formatCurrency(item.amount)}</span>

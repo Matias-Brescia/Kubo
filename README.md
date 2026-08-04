@@ -86,17 +86,16 @@ pnpm preview
 ```
 
 > **Nota:** si abres el proyecto sin configurar `.env`, Kubo muestra una pantalla con instrucciones en vez de fallar en blanco.
-## Novedades de esta versión — v0.5
+## Novedades de esta versión — v0.5.1
 
-- **Refresh de UX/UI completo** — nueva paleta (fondo neutro, acento morado, sidebar oscuro fijo), aplicada vía CSS variables y tokens de Tailwind existentes (sin sistema paralelo)
-- **Sistema de componentes ampliado** — Button, Card, Badge, Input, Progress, Select y Separator con variantes semánticas (success/warning/danger/info); nuevos componentes `EmptyState` y `Table`
-- **10 colores de categoría** definidos como tokens (comida, transporte, hogar, salud, entretenimiento, educación, compras, trabajo, viajes, mascotas)
-- **Rediseño de todas las pantallas** — Dashboard, Transacciones (feed tipo lista, no tabla), Presupuestos, Metas, Reportes, Ajustes, Sidebar y Topbar
-- **Nuevo flujo de fecha en Transacciones** — por defecto usa "Hoy"; el selector solo aparece si el usuario quiere elegir otra fecha (Hoy / Ayer / Elegir fecha...)
-- Animaciones más rápidas y consistentes (200ms, ease-out) en toda la app
-- Revisión de accesibilidad (focus visible, aria-labels, touch targets) y responsive en los 3 breakpoints
-- Todo lo de v0.1 a v0.4 se mantiene
+- **Sidebar tipo Notion** — altura fija de viewport, posición sticky, scroll independiente en el menú, perfil y ajustes siempre visibles; ya no crece con el contenido de la página
+- **Corrección de un bug de fechas** en recurrentes, transacciones, reportes y exportación CSV: las fechas de calendario (`YYYY-MM-DD`) se interpretaban como instantes UTC en vez de días locales, lo que podía correr el día mostrado o guardado en zonas horarias con offset negativo (como Perú). Se corrigió con helpers de fecha local puros (`src/lib/date.ts`) en los 9 puntos afectados
+- **Color funcional de categorías** aplicado en toda la app — íconos de categoría en Transacciones, Presupuestos, Metas, Categorías, Recurrentes y gráficos de Reportes ahora usan su color correspondiente (antes definido en tokens pero sin usarse)
+- **Contraste corregido en modo claro** — 7 de los 10 colores de categoría no cumplían el mínimo de contraste WCAG AA sobre fondo claro; se ajustó su luminosidad manteniendo el mismo tono, sin tocar el modo oscuro
+- Consistencia visual: overlays de diálogo, botones de acción destructiva y gráficos de Reportes alineados al mismo patrón visual
+- QA funcional completo: registro, login, logout, CRUD de transacciones/presupuestos/metas/categorías/recurrentes, reportes, ajustes, responsive y navegación revisados sin bugs abiertos
+- Todo lo de v0.1 a v0.5 se mantiene
 
 ## Próximas entregas
 
-- **v0.5.1** — Sidebar con comportamiento sticky, corrección de un bug de fechas en recurrentes, y refinamiento visual adicional.
+- A definir.

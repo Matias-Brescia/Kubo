@@ -1,8 +1,9 @@
+import { parseLocalIso } from "@/lib/date";
 import type { Transaction } from "@/features/transactions/hooks";
 
 function isCurrentMonth(iso: string) {
   const now = new Date();
-  const d = new Date(iso);
+  const d = parseLocalIso(iso);
   return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
 }
 

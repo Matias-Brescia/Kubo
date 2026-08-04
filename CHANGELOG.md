@@ -4,6 +4,15 @@ Historial de versiones del proyecto, de la más reciente a la más antigua. Cada
 
 ---
 
+## v0.5.1
+
+- **Sidebar tipo Notion** — altura fija de viewport, posición sticky, scroll independiente en el menú, perfil y ajustes siempre visibles; ya no crece con el contenido de la página
+- **Corrección de un bug de fechas** en recurrentes, transacciones, reportes y exportación CSV: las fechas de calendario (`YYYY-MM-DD`) se interpretaban como instantes UTC en vez de días locales, lo que podía correr el día mostrado o guardado en zonas horarias con offset negativo (como Perú). Se corrigió con helpers de fecha local puros (`src/lib/date.ts`) en los 9 puntos afectados
+- **Color funcional de categorías** aplicado en toda la app — íconos de categoría en Transacciones, Presupuestos, Metas, Categorías, Recurrentes y gráficos de Reportes ahora usan su color correspondiente (antes definido en tokens pero sin usarse)
+- **Contraste corregido en modo claro** — 7 de los 10 colores de categoría no cumplían el mínimo de contraste WCAG AA sobre fondo claro; se ajustó su luminosidad manteniendo el mismo tono, sin tocar el modo oscuro
+- Consistencia visual: overlays de diálogo, botones de acción destructiva y gráficos de Reportes alineados al mismo patrón visual
+- QA funcional completo: registro, login, logout, CRUD de transacciones/presupuestos/metas/categorías/recurrentes, reportes, ajustes, responsive y navegación revisados sin bugs abiertos
+
 ## v0.5
 
 - **Refresh de UX/UI completo** — nueva paleta (fondo neutro, acento morado, sidebar oscuro fijo), aplicada vía CSS variables y tokens de Tailwind existentes (sin sistema paralelo)

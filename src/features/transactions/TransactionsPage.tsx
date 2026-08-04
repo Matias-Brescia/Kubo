@@ -6,8 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useCurrency } from "@/app/providers/CurrencyProvider";
-import { getCategoryIconByKey } from "@/lib/category-icons";
+import { getCategoryIconByKey, getCategoryColorByKey } from "@/lib/category-icons";
 import { cn } from "@/lib/utils";
+import { parseLocalIso, todayLocal, yesterdayLocal } from "@/lib/date";
 import { useDeleteTransaction, useTransactions } from "./hooks";
 import { TransactionFormDialog } from "./components/TransactionFormDialog";
 
@@ -23,14 +24,11 @@ function groupByDate(transactions: ReturnType<typeof useTransactions>["data"]) {
 }
 
 function formatGroupDate(iso: string) {
-  const d = new Date(iso + "T00:00:00");
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
-
-  if (d.toDateString() === today.toDateString()) return "Hoy";
-  if (d.toDateString() === yesterday.toDateString()) return "Ayer";
-  return new Intl.DateTimeFormat("es-PE", { weekday: "long", day: "numeric", month: "long" }).format(d);
+  if (iso === todayLocal()) return "Hoy";
+  if (iso === yesterdayLocal()) return "Ayer";
+  return new Intl.DateTimeFormat("es-PE", { weekday: "long", day: "numeric", month: "long" }).format(
+    parseLocalIso(iso)
+  );
 }
 
 export function TransactionsPage() {
@@ -91,7 +89,7 @@ export function TransactionsPage() {
                             )}
                           >
                             <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover">
-                              <Icon className="size-4 text-muted" />
+                              <Icon className={cn("size-4", getCategoryColorByKey(tx.categoryIcon))} />
                             </div>
                             <div className="min-w-0 flex-1">
                               <p className="truncate text-sm font-medium">{tx.description}</p>

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/features/auth/AuthProvider";
+import { addDaysIso, addMonthsIso, addYearsIso, isIsoTodayOrPast } from "@/lib/date";
 import type { RecurringFrequency, TransactionKind } from "@/lib/database.types";
 
 export interface RecurringTransaction {
@@ -130,16 +131,10 @@ export function useDeleteRecurring() {
   });
 }
 
-function advance(date: Date, frequency: RecurringFrequency): Date {
-  const next = new Date(date);
-  if (frequency === "weekly") next.setDate(next.getDate() + 7);
-  else if (frequency === "monthly") next.setMonth(next.getMonth() + 1);
-  else next.setFullYear(next.getFullYear() + 1);
-  return next;
-}
-
-function toIsoDate(date: Date) {
-  return date.toISOString().slice(0, 10);
+function advanceIso(iso: string, frequency: RecurringFrequency): string {
+  if (frequency === "weekly") return addDaysIso(iso, 7);
+  if (frequency === "monthly") return addMonthsIso(iso, 1);
+  return addYearsIso(iso, 1);
 }
 
 /**
@@ -148,6 +143,11 @@ function toIsoDate(date: Date) {
  * y avanza la fecha hasta que quede en el futuro. Como Kubo no corre un
  * cron en el servidor, esto es lo que "dispara" los recurrentes — basta
  * con que el usuario abra la app una vez al día para que no se acumulen.
+ *
+ * Todas las comparaciones y avances de fecha se hacen sobre el string
+ * "YYYY-MM-DD" directamente (comparación lexicográfica, que coincide con
+ * el orden cronológico), sin pasar por `new Date(iso)` ni `toISOString()`,
+ * para evitar corrimientos de día por zona horaria.
  */
 export function useRunDueRecurringTransactions() {
   const { user } = useAuth();
@@ -157,36 +157,36 @@ export function useRunDueRecurringTransactions() {
   useEffect(() => {
     if (!user || !recurring || recurring.length === 0) return;
 
-    const due = recurring.filter((r) => r.isActive && new Date(r.nextOccurrence) <= new Date());
+    const due = recurring.filter((r) => r.isActive && isIsoTodayOrPast(r.nextOccurrence));
     if (due.length === 0) return;
 
     (async () => {
       for (const item of due) {
-        let occurrence = new Date(item.nextOccurrence);
-        const rowsToInsert: { occurred_on: string }[] = [];
+        let occurrence = item.nextOccurrence;
+        const occurredOnDates: string[] = [];
 
-        while (occurrence <= new Date()) {
-          rowsToInsert.push({ occurred_on: toIsoDate(occurrence) });
-          occurrence = advance(occurrence, item.frequency);
+        while (isIsoTodayOrPast(occurrence)) {
+          occurredOnDates.push(occurrence);
+          occurrence = advanceIso(occurrence, item.frequency);
         }
 
-        if (rowsToInsert.length === 0) continue;
+        if (occurredOnDates.length === 0) continue;
 
         const { error: insertError } = await supabase.from("transactions").insert(
-          rowsToInsert.map((row) => ({
+          occurredOnDates.map((occurredOn) => ({
             user_id: user.id,
             description: item.description,
             amount: item.amount,
             kind: item.kind,
             category_id: item.categoryId,
-            occurred_on: row.occurred_on,
+            occurred_on: occurredOn,
           }))
         );
         if (insertError) continue;
 
         await supabase
           .from("recurring_transactions")
-          .update({ next_occurrence: toIsoDate(occurrence) })
+          .update({ next_occurrence: occurrence })
           .eq("id", item.id);
       }
 

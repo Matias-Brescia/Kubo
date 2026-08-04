@@ -2,15 +2,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useCurrency } from "@/app/providers/CurrencyProvider";
 import { cn } from "@/lib/utils";
-import { getCategoryIconByKey } from "@/lib/category-icons";
+import { getCategoryIconByKey, getCategoryColorByKey } from "@/lib/category-icons";
+import { parseLocalIso } from "@/lib/date";
 import type { Transaction } from "@/features/transactions/hooks";
 
 function formatDate(iso: string) {
   return new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short" }).format(
-    new Date(iso)
+    parseLocalIso(iso)
   );
 }
-
 export function TransactionList({ transactions }: { transactions: Transaction[] }) {
   const { formatSignedCurrency } = useCurrency();
   return (
@@ -40,7 +40,7 @@ export function TransactionList({ transactions }: { transactions: Transaction[] 
                     )}
                   >
                     <div className="flex size-8 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover">
-                      <Icon className="size-4 text-muted" />
+                      <Icon className={cn("size-4", getCategoryColorByKey(tx.categoryIcon))} />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium">{tx.description}</p>

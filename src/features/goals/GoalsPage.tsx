@@ -9,14 +9,16 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { AnimatedCurrency } from "@/components/shared/AnimatedCurrency";
 import { useCurrency } from "@/app/providers/CurrencyProvider";
-import { getCategoryIconByKey } from "@/lib/category-icons";
+import { getCategoryIconByKey, getCategoryColorByKey } from "@/lib/category-icons";
+import { cn } from "@/lib/utils";
+import { parseLocalIso } from "@/lib/date";
 import { useGoals, useDeleteGoal } from "./hooks";
 import { GoalFormDialog } from "./components/GoalFormDialog";
 import { AddContributionDialog } from "./components/AddContributionDialog";
 
 function formatDate(iso: string) {
   return new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(
-    new Date(iso)
+    parseLocalIso(iso)
   );
 }
 
@@ -66,7 +68,7 @@ export function GoalsPage() {
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-3">
                           <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover">
-                            <Icon className="size-4 text-muted" />
+                            <Icon className={cn("size-4", getCategoryColorByKey(goal.icon))} />
                           </div>
                           <div>
                             <p className="text-sm font-semibold">{goal.name}</p>

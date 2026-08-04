@@ -9,9 +9,9 @@ export function AppShell({ children }: { children: ReactNode }) {
   useRunDueRecurringTransactions();
 
   return (
-    <div className="flex min-h-screen bg-bg text-foreground">
+    <div className="flex h-screen overflow-hidden bg-bg text-foreground">
       <Sidebar />
-      <main className="flex-1 pb-16">{children}</main>
+      <main className="flex-1 overflow-y-auto pb-16">{children}</main>
     </div>
   );
 }

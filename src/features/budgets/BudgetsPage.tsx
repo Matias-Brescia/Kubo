@@ -9,7 +9,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { AnimatedCurrency } from "@/components/shared/AnimatedCurrency";
 import { useCurrency } from "@/app/providers/CurrencyProvider";
 import { Card } from "@/components/ui/card";
-import { getCategoryIconByKey } from "@/lib/category-icons";
+import { getCategoryIconByKey, getCategoryColorByKey } from "@/lib/category-icons";
 import { cn } from "@/lib/utils";
 import { useTransactions } from "@/features/transactions/hooks";
 import { useBudgets, useDeleteBudget } from "./hooks";
@@ -74,7 +74,7 @@ export function BudgetsPage() {
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-3">
                           <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover">
-                            <Icon className="size-4 text-muted" />
+                            <Icon className={cn("size-4", getCategoryColorByKey(budget.categoryIcon))} />
                           </div>
                           <div>
                             <p className="text-sm font-semibold">{budget.categoryName}</p>

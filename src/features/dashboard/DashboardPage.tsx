@@ -60,7 +60,7 @@ export function DashboardPage() {
             expense={stats.monthExpense}
           />
         </div>
-        <div className="grid grid-cols-2 gap-5 md:grid-cols-1">
+        <div className="grid grid-cols-2 gap-6 md:grid-cols-1">
           <StatCard
             icon={PiggyBank}
             label="Ahorro del mes"
@@ -72,11 +72,12 @@ export function DashboardPage() {
             label="Mayor gasto del mes"
             value={stats.topCategory?.amount ?? 0}
             helper={stats.topCategory ? stats.topCategory.name : "Sin gastos este mes"}
+            tone="negative"
           />
         </div>
       </div>
 
-      <div className="mt-6 grid gap-6 px-6 md:grid-cols-3 md:px-10">
+      <div className="mt-6 grid gap-6 px-6 pb-10 md:grid-cols-3 md:px-10">
         <div className="md:col-span-2">
           <SpendingChart data={stats.trend} />
         </div>
@@ -95,7 +96,7 @@ export function DashboardPage() {
       </div>
 
       {transactions.length === 0 && (
-        <p className="mt-4 px-6 text-center text-xs text-muted md:px-10">
+        <p className="px-6 pb-10 text-center text-xs text-muted md:px-10">
           Balance total: {formatCurrency(stats.balance)} · empieza registrando tu primer movimiento.
         </p>
       )}

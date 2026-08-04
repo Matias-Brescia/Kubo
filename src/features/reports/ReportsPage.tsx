@@ -51,6 +51,7 @@ export function ReportsPage() {
           label="Gastos del mes"
           value={currentMonth?.expense ?? 0}
           helper="Total de gastos registrados este mes"
+          tone="negative"
         />
         <StatCard
           icon={Wallet}
@@ -60,7 +61,7 @@ export function ReportsPage() {
         />
       </div>
 
-      <div className="mt-6 grid gap-6 px-6 md:grid-cols-2 md:px-10">
+      <div className="mt-6 grid gap-6 px-6 pb-10 md:grid-cols-2 md:px-10">
         <CategoryBreakdownChart data={breakdown} />
         <HistoricalTrendChart data={historical} />
       </div>

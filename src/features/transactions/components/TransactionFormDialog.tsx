@@ -10,22 +10,19 @@ import { Select } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useCategories } from "@/features/categories/hooks";
 import { useCreateTransaction, useUpdateTransaction } from "../hooks";
+import { todayLocal, yesterdayLocal, parseLocalIso } from "@/lib/date";
 import type { Transaction } from "../hooks";
 import type { TransactionKind } from "@/lib/database.types";
 
-const today = () => new Date().toISOString().slice(0, 10);
-const yesterday = () => {
-  const d = new Date();
-  d.setDate(d.getDate() - 1);
-  return d.toISOString().slice(0, 10);
-};
+const today = todayLocal;
+const yesterday = yesterdayLocal;
 function friendlyDate(iso: string) {
   const t = today();
   const y = yesterday();
   if (iso === t) return "Hoy";
   if (iso === y) return "Ayer";
   return new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(
-    new Date(iso + "T00:00:00")
+    parseLocalIso(iso)
   );
 }
 
@@ -139,7 +136,7 @@ export function TransactionFormDialog({ transaction, trigger }: TransactionFormD
         )}
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/50 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
+        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/60 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
         <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-kubo border border-border bg-surface p-6 shadow-kubo-lg outline-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95">
           <div className="flex items-center justify-between">
             <Dialog.Title className="text-base font-semibold">

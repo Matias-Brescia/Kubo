@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
-import { getCategoryIconByKey } from "@/lib/category-icons";
+import { getCategoryIconByKey, getCategoryColorByKey } from "@/lib/category-icons";
+import { cn } from "@/lib/utils";
 import { useCategories, useDeleteCategory } from "./hooks";
 import { AddCategoryDialog } from "./components/AddCategoryDialog";
 
@@ -54,7 +55,7 @@ export function CategoriesPage() {
                       }`}
                     >
                       <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover">
-                        <Icon className="size-4 text-muted" aria-hidden="true" />
+                        <Icon className={cn("size-4", getCategoryColorByKey(cat.icon))} aria-hidden="true" />
                       </div>
                       <p className="flex-1 text-sm font-medium">{cat.name}</p>
                       <Badge variant={meta.variant}>{meta.label}</Badge>

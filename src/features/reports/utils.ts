@@ -1,3 +1,4 @@
+import { parseLocalIso, todayLocal } from "@/lib/date";
 import type { Transaction } from "@/features/transactions/hooks";
 
 const monthLabels = [
@@ -6,7 +7,7 @@ const monthLabels = [
 ];
 
 function isSameMonth(iso: string, date: Date) {
-  const d = new Date(iso);
+  const d = parseLocalIso(iso);
   return d.getFullYear() === date.getFullYear() && d.getMonth() === date.getMonth();
 }
 
@@ -79,7 +80,7 @@ export function exportTransactionsToCsv(transactions: Transaction[]) {
   const blob = new Blob([`\uFEFF${csv}`], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayLocal();
   link.href = url;
   link.download = `kubo-movimientos-${today}.csv`;
   document.body.appendChild(link);

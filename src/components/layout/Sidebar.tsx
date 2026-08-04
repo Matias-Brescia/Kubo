@@ -47,22 +47,22 @@ export function Sidebar() {
   const displayName = (user?.user_metadata?.full_name as string | undefined) || user?.email?.split("@")[0] || "Usuario";
 
   return (
-    <aside className="hidden w-64 shrink-0 flex-col bg-[#0F172A] px-3 py-5 md:flex">
+    <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col bg-[#0F172A] py-5 md:flex">
       {/* Logo */}
-      <div className="flex items-center gap-2.5 px-3 py-1">
+      <div className="flex items-center gap-2.5 px-6 py-1">
         <Logo className="size-6" />
         <span className="text-sm font-semibold tracking-tight text-white">Kubo</span>
       </div>
 
-      {/* Nav principal */}
-      <nav className="mt-6 flex flex-1 flex-col gap-0.5">
+      {/* Nav principal — scroll propio si el contenido crece, independiente del resto de la página */}
+      <nav className="mt-6 flex flex-1 flex-col gap-0.5 overflow-y-auto px-3">
         {navItems.map((item) => (
           <NavRow key={item.path} item={item} />
         ))}
       </nav>
 
-      {/* Footer */}
-      <div className="flex flex-col gap-0.5 border-t border-white/8 pt-3 mt-2">
+      {/* Footer — siempre visible, no se mueve ni se corta con el scroll del nav */}
+      <div className="flex shrink-0 flex-col gap-0.5 border-t border-white/8 px-3 pt-3">
         <NavRow item={settingsItem} />
         <button
           onClick={toggleTheme}

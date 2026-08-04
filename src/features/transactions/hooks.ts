@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/features/auth/AuthProvider";
+import { todayLocal } from "@/lib/date";
 import type { TransactionKind } from "@/lib/database.types";
 
 export interface Transaction {
@@ -78,7 +79,7 @@ export function useCreateTransaction() {
         amount: input.amount,
         kind: input.kind,
         category_id: input.categoryId,
-        occurred_on: input.occurredOn ?? new Date().toISOString().slice(0, 10),
+        occurred_on: input.occurredOn ?? todayLocal(),
       });
       if (error) throw error;
     },

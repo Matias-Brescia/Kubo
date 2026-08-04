@@ -10,6 +10,7 @@ import { Select } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useCategories } from "@/features/categories/hooks";
 import { useCreateRecurring } from "../hooks";
+import { todayLocal } from "@/lib/date";
 import type { TransactionKind, RecurringFrequency } from "@/lib/database.types";
 
 const schema = z.object({
@@ -49,7 +50,7 @@ export function RecurringFormDialog({ trigger }: { trigger?: ReactNode }) {
       categoryId: categories[0]?.id ?? "",
       kind: "expense",
       frequency: "monthly",
-      startDate: new Date().toISOString().slice(0, 10),
+      startDate: todayLocal(),
     },
   });
 
@@ -63,7 +64,7 @@ export function RecurringFormDialog({ trigger }: { trigger?: ReactNode }) {
       categoryId: categories[0]?.id ?? "",
       kind: "expense",
       frequency: "monthly",
-      startDate: new Date().toISOString().slice(0, 10),
+      startDate: todayLocal(),
     });
     setKind("expense");
     setOpen(false);
@@ -86,7 +87,7 @@ export function RecurringFormDialog({ trigger }: { trigger?: ReactNode }) {
         )}
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/50 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
+        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/60 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
         <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-kubo border border-border bg-surface p-6 shadow-kubo-lg outline-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95">
           <div className="flex items-center justify-between">
             <Dialog.Title className="text-base font-semibold">Nuevo recurrente</Dialog.Title>

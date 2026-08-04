@@ -7,7 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useCurrency } from "@/app/providers/CurrencyProvider";
-import { getCategoryIconByKey } from "@/lib/category-icons";
+import { getCategoryIconByKey, getCategoryColorByKey } from "@/lib/category-icons";
+import { parseLocalIso } from "@/lib/date";
 import { cn } from "@/lib/utils";
 import {
   useRecurringTransactions,
@@ -25,7 +26,7 @@ const frequencyLabels: Record<RecurringFrequency, string> = {
 
 function formatDate(iso: string) {
   return new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(
-    new Date(iso)
+    parseLocalIso(iso)
   );
 }
 
@@ -76,7 +77,7 @@ export function RecurringPage() {
                       )}
                     >
                       <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover">
-                        <Icon className="size-4 text-muted" />
+                        <Icon className={cn("size-4", getCategoryColorByKey(item.categoryIcon))} />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium">{item.description}</p>

@@ -70,17 +70,20 @@
   /* Focus/Ring */
   --ring: 96 28% 34%;
   
-  /* Category colors (same across light/dark for consistency) */
-  --category-food: 33 97% 53%;
-  --category-transport: 198 93% 60%;
-  --category-home: 132 53% 49%;
-  --category-health: 0 84% 60%;
-  --category-entertainment: 280 85% 67%;
-  --category-education: 188 94% 50%;
-  --category-shopping: 42 96% 56%;
+  /* Category colors — mismo hue/saturación que en dark, pero con menor
+     luminosidad para mantener contraste AA (4.5:1+) sobre fondo claro.
+     El dark mode usa colores más brillantes porque el fondo oscuro los
+     admite sin perder legibilidad; en claro se oscurecen para compensar. */
+  --category-food: 33 97% 33%;
+  --category-transport: 198 93% 34%;
+  --category-home: 132 53% 32%;
+  --category-health: 0 84% 47%;
+  --category-entertainment: 280 85% 54%;
+  --category-education: 188 94% 28%;
+  --category-shopping: 42 96% 29%;
   --category-work: 242 72% 54%;
-  --category-travel: 174 77% 55%;
-  --category-pets: 330 81% 60%;
+  --category-travel: 174 77% 27%;
+  --category-pets: 330 81% 46%;
 }
 
 * {
