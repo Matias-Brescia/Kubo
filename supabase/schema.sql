@@ -97,6 +97,15 @@ create policy "Los usuarios eliminan sus propias transacciones"
   on public.transactions for delete
   using (auth.uid() = user_id);
 
+create index if not exists transactions_user_date_idx
+  on public.transactions (user_id, occurred_on desc);
+
+create index if not exists budgets_user_idx
+  on public.budgets (user_id);
+
+create index if not exists goals_user_idx
+  on public.goals (user_id);
+
 -- ------------------------------------------------------------
 -- Tabla: budgets
 -- Un límite mensual por categoría (recurrente, sin fecha fija:
@@ -164,15 +173,6 @@ create policy "Los usuarios editan sus propias metas"
 create policy "Los usuarios eliminan sus propias metas"
   on public.goals for delete
   using (auth.uid() = user_id);
-
-create index if not exists transactions_user_date_idx
-  on public.transactions (user_id, occurred_on desc);
-
-create index if not exists budgets_user_idx
-  on public.budgets (user_id);
-
-create index if not exists goals_user_idx
-  on public.goals (user_id);
 
 -- ------------------------------------------------------------
 -- Tabla: recurring_transactions

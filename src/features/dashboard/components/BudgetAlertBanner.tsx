@@ -29,11 +29,11 @@ export function BudgetAlertBanner() {
   return (
     <Link
       to="/presupuestos"
-      className="flex items-center gap-3 rounded-kubo-sm border border-negative/30 bg-negative/10 px-4 py-3 text-sm text-negative transition-colors hover:bg-negative/15"
+      className="flex items-center gap-3 rounded-kubo border border-negative/25 bg-negative/8 px-4 py-3.5 text-sm text-negative transition-all duration-200 hover:bg-negative/12"
     >
       <AlertTriangle className="size-4 shrink-0" />
-      <span className="flex-1">{message}</span>
-      <span className="shrink-0 text-xs font-medium">Ver presupuestos →</span>
+      <span className="flex-1 font-medium">{message}</span>
+      <span className="shrink-0 text-xs opacity-70">Ver presupuestos →</span>
     </Link>
   );
 }

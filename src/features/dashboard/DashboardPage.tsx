@@ -52,7 +52,7 @@ export function DashboardPage() {
         <BudgetAlertBanner />
       </div>
 
-      <div className="mt-4 grid animate-fade-up gap-5 px-6 md:grid-cols-3 md:px-10">
+      <div className="mt-8 grid animate-fade-up gap-6 px-6 md:grid-cols-3 md:px-10">
         <div className="md:col-span-2">
           <BalanceCard
             balance={stats.balance}
@@ -76,7 +76,7 @@ export function DashboardPage() {
         </div>
       </div>
 
-      <div className="mt-5 grid gap-5 px-6 md:grid-cols-3 md:px-10">
+      <div className="mt-6 grid gap-6 px-6 md:grid-cols-3 md:px-10">
         <div className="md:col-span-2">
           <SpendingChart data={stats.trend} />
         </div>
@@ -85,7 +85,7 @@ export function DashboardPage() {
           {transactions.length > 0 && (
             <Link
               to="/transacciones"
-              className="flex items-center justify-center gap-1.5 text-sm font-medium text-muted hover:text-foreground"
+              className="flex items-center justify-center gap-1.5 rounded-kubo-sm border border-border py-2.5 text-sm font-medium text-muted transition-all duration-200 hover:border-accent/30 hover:bg-surface-hover hover:text-foreground"
             >
               Ver todas las transacciones
               <ArrowRight className="size-3.5" />

@@ -131,7 +131,7 @@ export function BudgetFormDialog({ budget, usedCategoryIds = [], trigger }: Budg
                   step="0.01"
                   inputMode="decimal"
                   placeholder="0.00"
-                  className="font-mono tabular"
+                  className="font-mono tabular-nums"
                   autoFocus
                   onFocus={(e) => e.currentTarget.select()}
                   {...register("monthlyAmount", { valueAsNumber: true })}

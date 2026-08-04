@@ -23,7 +23,7 @@ function HistoricalTooltip({
     <div className="rounded-kubo-sm border border-border bg-surface px-3 py-2 text-xs shadow-kubo-lg">
       <p className="mb-1 font-medium text-muted">{label}</p>
       {payload.map((entry) => (
-        <p key={entry.dataKey} className="font-mono tabular">
+        <p key={entry.dataKey} className="font-mono tabular-nums">
           {labels[entry.dataKey] ?? entry.dataKey}: {formatCurrency(entry.value)}
         </p>
       ))}

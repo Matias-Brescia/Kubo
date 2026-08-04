@@ -15,42 +15,40 @@ export function TransactionList({ transactions }: { transactions: Transaction[] 
   const { formatSignedCurrency } = useCurrency();
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="pb-0">
         <CardTitle>Actividad reciente</CardTitle>
       </CardHeader>
-      <CardContent className="pt-4">
+      <CardContent className="p-0 pt-2">
         {transactions.length === 0 ? (
-          <p className="py-8 text-center text-sm text-muted">
-            Todavía no hay movimientos. Añade tu primer gasto o ingreso.
+          <p className="px-5 py-10 text-center text-sm text-muted">
+            Sin movimientos recientes.
           </p>
         ) : (
-          <ul className="flex flex-col">
+          <ul>
             <AnimatePresence initial={false}>
               {transactions.map((tx, i) => {
                 const Icon = getCategoryIconByKey(tx.categoryIcon);
                 return (
                   <motion.li
                     key={tx.id}
-                    initial={{ opacity: 0, y: -8 }}
+                    initial={{ opacity: 0, y: -6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.25, ease: "easeOut" }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
                     className={cn(
-                      "flex items-center gap-3 py-3",
+                      "flex items-center gap-3 px-5 py-3 transition-colors duration-200 hover:bg-surface-hover/50",
                       i !== transactions.length - 1 && "border-b border-border"
                     )}
                   >
-                    <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover text-muted">
-                      <Icon className="size-4" />
+                    <div className="flex size-8 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover">
+                      <Icon className="size-4 text-muted" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium">{tx.description}</p>
-                      <p className="text-xs text-muted">
-                        {tx.categoryName} · {formatDate(tx.occurredOn)}
-                      </p>
+                      <p className="text-xs text-muted">{formatDate(tx.occurredOn)}</p>
                     </div>
                     <p
                       className={cn(
-                        "shrink-0 font-mono text-sm font-medium tabular",
+                        "shrink-0 font-mono text-sm font-semibold tabular-nums",
                         tx.kind === "income" ? "text-accent" : "text-foreground"
                       )}
                     >

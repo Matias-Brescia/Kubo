@@ -1,13 +1,14 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Loader2, Pencil, PiggyBank, Trash2 } from "lucide-react";
 import { Topbar } from "@/components/layout/Topbar";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { EmptyState } from "@/components/ui/empty-state";
 import { AnimatedCurrency } from "@/components/shared/AnimatedCurrency";
 import { useCurrency } from "@/app/providers/CurrencyProvider";
-import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { getCategoryIconByKey } from "@/lib/category-icons";
 import { cn } from "@/lib/utils";
 import { useTransactions } from "@/features/transactions/hooks";
@@ -32,27 +33,23 @@ export function BudgetsPage() {
         action={<BudgetFormDialog usedCategoryIds={usedCategoryIds} />}
       />
 
-      <div className="mt-6 px-6 md:mt-8 md:px-10">
+      <div className="mt-6 px-6 pb-10 md:mt-8 md:px-10">
         {isLoading ? (
-          <div className="flex items-center justify-center gap-2 py-16 text-sm text-muted">
+          <div className="flex items-center justify-center gap-2 py-20 text-sm text-muted">
             <Loader2 className="size-4 animate-spin" /> Cargando presupuestos...
           </div>
         ) : budgets.length === 0 ? (
-          <Card>
-            <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-              <div className="flex size-12 items-center justify-center rounded-full bg-surface-hover text-muted">
-                <PiggyBank className="size-5" />
-              </div>
-              <p className="text-sm font-medium">Todavía no tienes presupuestos</p>
-              <p className="max-w-xs text-sm text-muted">
-                Crea un límite mensual por categoría para controlar tus gastos.
-              </p>
+          <EmptyState
+            icon={PiggyBank}
+            title="Todavía no tienes presupuestos"
+            description="Crea un límite mensual por categoría para controlar tus gastos."
+            action={
               <BudgetFormDialog
                 usedCategoryIds={usedCategoryIds}
-                trigger={<Button className="mt-2">Crear mi primer presupuesto</Button>}
+                trigger={<Button>Crear mi primer presupuesto</Button>}
               />
-            </CardContent>
-          </Card>
+            }
+          />
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence initial={false}>
@@ -61,6 +58,7 @@ export function BudgetsPage() {
                 const pct = Math.min((spent / budget.monthlyAmount) * 100, 100);
                 const remaining = budget.monthlyAmount - spent;
                 const isOver = spent > budget.monthlyAmount;
+                const isNear = !isOver && pct >= 80;
                 const Icon = getCategoryIconByKey(budget.categoryIcon);
 
                 return (
@@ -70,34 +68,34 @@ export function BudgetsPage() {
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.3, ease: "easeOut", delay: i * 0.04 }}
+                    transition={{ duration: 0.2, ease: "easeOut", delay: i * 0.04 }}
                   >
                     <Card className="group p-5">
                       <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-center gap-2.5">
-                          <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover text-muted">
-                            <Icon className="size-4" />
+                        <div className="flex items-center gap-3">
+                          <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover">
+                            <Icon className="size-4 text-muted" />
                           </div>
                           <div>
-                            <p className="text-sm font-medium">{budget.categoryName}</p>
+                            <p className="text-sm font-semibold">{budget.categoryName}</p>
                             <p className="text-xs text-muted">
                               Límite {formatCurrency(budget.monthlyAmount)}
                             </p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                        <div className="flex items-center gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                           <BudgetFormDialog
                             budget={budget}
                             trigger={
                               <Button variant="ghost" size="icon" aria-label="Editar">
-                                <Pencil className="size-4" />
+                                <Pencil className="size-3.5" />
                               </Button>
                             }
                           />
                           <ConfirmDialog
                             trigger={
                               <Button variant="ghost" size="icon" aria-label="Eliminar">
-                                <Trash2 className="size-4 text-negative" />
+                                <Trash2 className="size-3.5 text-negative" />
                               </Button>
                             }
                             title="Eliminar presupuesto"
@@ -108,24 +106,26 @@ export function BudgetsPage() {
                         </div>
                       </div>
 
-                      <div className="mt-4">
+                      <div className="mt-5">
                         <Progress
                           value={pct}
-                          className={cn(isOver && "[&>div]:bg-negative")}
+                          color={isOver ? "danger" : isNear ? "warning" : "accent"}
                         />
-                        <div className="mt-2 flex items-center justify-between text-xs">
+                        <div className="mt-2.5 flex items-center justify-between">
                           <AnimatedCurrency
                             value={spent}
-                            className={cn("font-medium", isOver && "text-negative")}
+                            className={cn(
+                              "text-sm font-semibold",
+                              isOver ? "text-negative" : "text-foreground"
+                            )}
                           />
                           <div className="flex items-center gap-2">
-                            {(isOver || pct >= 80) && (
-                              <Badge variant="negative">{isOver ? "Excedido" : "80%+"}</Badge>
-                            )}
-                            <span className={cn("text-muted", isOver && "text-negative")}>
+                            {isOver && <Badge variant="danger">Excedido</Badge>}
+                            {isNear && !isOver && <Badge variant="warning">80%+</Badge>}
+                            <span className={cn("text-xs text-muted", isOver && "text-negative")}>
                               {isOver
-                                ? `Excedido por ${formatCurrency(Math.abs(remaining))}`
-                                : `Quedan ${formatCurrency(remaining)}`}
+                                ? `+${formatCurrency(Math.abs(remaining))}`
+                                : `quedan ${formatCurrency(remaining)}`}
                             </span>
                           </div>
                         </div>

@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Loader2, Pencil, Target, Trash2 } from "lucide-react";
 import { Topbar } from "@/components/layout/Topbar";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { EmptyState } from "@/components/ui/empty-state";
 import { AnimatedCurrency } from "@/components/shared/AnimatedCurrency";
 import { useCurrency } from "@/app/providers/CurrencyProvider";
 import { getCategoryIconByKey } from "@/lib/category-icons";
@@ -31,24 +33,18 @@ export function GoalsPage() {
         action={<GoalFormDialog />}
       />
 
-      <div className="mt-6 px-6 md:mt-8 md:px-10">
+      <div className="mt-6 px-6 pb-10 md:mt-8 md:px-10">
         {isLoading ? (
-          <div className="flex items-center justify-center gap-2 py-16 text-sm text-muted">
+          <div className="flex items-center justify-center gap-2 py-20 text-sm text-muted">
             <Loader2 className="size-4 animate-spin" /> Cargando metas...
           </div>
         ) : goals.length === 0 ? (
-          <Card>
-            <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-              <div className="flex size-12 items-center justify-center rounded-full bg-surface-hover text-muted">
-                <Target className="size-5" />
-              </div>
-              <p className="text-sm font-medium">Todavía no tienes metas de ahorro</p>
-              <p className="max-w-xs text-sm text-muted">
-                Crea un objetivo, como un viaje o un fondo de emergencia, y sigue tu avance.
-              </p>
-              <GoalFormDialog trigger={<Button className="mt-2">Crear mi primera meta</Button>} />
-            </CardContent>
-          </Card>
+          <EmptyState
+            icon={Target}
+            title="Todavía no tienes metas de ahorro"
+            description="Crea un objetivo, como un viaje o un fondo de emergencia, y sigue tu avance."
+            action={<GoalFormDialog trigger={<Button>Crear mi primera meta</Button>} />}
+          />
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence initial={false}>
@@ -64,34 +60,34 @@ export function GoalsPage() {
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.3, ease: "easeOut", delay: i * 0.04 }}
+                    transition={{ duration: 0.2, ease: "easeOut", delay: i * 0.04 }}
                   >
                     <Card className="group p-5">
                       <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-center gap-2.5">
-                          <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover text-muted">
-                            <Icon className="size-4" />
+                        <div className="flex items-center gap-3">
+                          <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover">
+                            <Icon className="size-4 text-muted" />
                           </div>
                           <div>
-                            <p className="text-sm font-medium">{goal.name}</p>
+                            <p className="text-sm font-semibold">{goal.name}</p>
                             {goal.targetDate && (
                               <p className="text-xs text-muted">Para {formatDate(goal.targetDate)}</p>
                             )}
                           </div>
                         </div>
-                        <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                        <div className="flex items-center gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                           <GoalFormDialog
                             goal={goal}
                             trigger={
                               <Button variant="ghost" size="icon" aria-label="Editar">
-                                <Pencil className="size-4" />
+                                <Pencil className="size-3.5" />
                               </Button>
                             }
                           />
                           <ConfirmDialog
                             trigger={
                               <Button variant="ghost" size="icon" aria-label="Eliminar">
-                                <Trash2 className="size-4 text-negative" />
+                                <Trash2 className="size-3.5 text-negative" />
                               </Button>
                             }
                             title="Eliminar meta"
@@ -102,20 +98,24 @@ export function GoalsPage() {
                         </div>
                       </div>
 
-                      <div className="mt-4">
-                        <Progress value={pct} />
-                        <div className="mt-2 flex items-center justify-between text-xs">
-                          <span className="font-medium">
-                            <AnimatedCurrency value={goal.currentAmount} /> de{" "}
-                            {formatCurrency(goal.targetAmount)}
+                      <div className="mt-5">
+                        <Progress value={pct} color={isComplete ? "success" : "accent"} />
+                        <div className="mt-2.5 flex items-center justify-between">
+                          <span className="text-sm font-semibold">
+                            <AnimatedCurrency value={goal.currentAmount} />
                           </span>
-                          <span className={isComplete ? "font-medium text-accent" : "text-muted"}>
-                            {isComplete ? "¡Completada! 🎉" : `${pct.toFixed(0)}%`}
-                          </span>
+                          <div className="flex items-center gap-2">
+                            {isComplete && <Badge variant="success">Completada</Badge>}
+                            <span className="text-xs text-muted">
+                              {isComplete
+                                ? formatCurrency(goal.targetAmount)
+                                : `de ${formatCurrency(goal.targetAmount)}`}
+                            </span>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="mt-4">
+                      <div className="mt-4 border-t border-border pt-4">
                         <AddContributionDialog goal={goal} />
                       </div>
                     </Card>
@@ -129,3 +129,5 @@ export function GoalsPage() {
     </>
   );
 }
+
+

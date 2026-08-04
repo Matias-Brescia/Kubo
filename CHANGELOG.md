@@ -4,6 +4,16 @@ Historial de versiones del proyecto, de la más reciente a la más antigua. Cada
 
 ---
 
+## v0.5
+
+- **Refresh de UX/UI completo** — nueva paleta (fondo neutro, acento morado, sidebar oscuro fijo), aplicada vía CSS variables y tokens de Tailwind existentes (sin sistema paralelo)
+- **Sistema de componentes ampliado** — Button, Card, Badge, Input, Progress, Select y Separator con variantes semánticas (success/warning/danger/info); nuevos componentes `EmptyState` y `Table`
+- **10 colores de categoría** definidos como tokens (comida, transporte, hogar, salud, entretenimiento, educación, compras, trabajo, viajes, mascotas)
+- **Rediseño de todas las pantallas** — Dashboard, Transacciones (feed tipo lista, no tabla), Presupuestos, Metas, Reportes, Ajustes, Sidebar y Topbar
+- **Nuevo flujo de fecha en Transacciones** — por defecto usa "Hoy"; el selector solo aparece si el usuario quiere elegir otra fecha (Hoy / Ayer / Elegir fecha...)
+- Animaciones más rápidas y consistentes (200ms, ease-out) en toda la app
+- Revisión de accesibilidad (focus visible, aria-labels, touch targets) y responsive en los 3 breakpoints
+
 ## v0.4
 
 - **Multi-moneda** — soporte para 7 monedas (PEN, USD, EUR, MXN, COP, CLP, ARS), configurable desde Ajustes; todos los montos de la app se formatean según la moneda elegida

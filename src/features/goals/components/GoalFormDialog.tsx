@@ -134,7 +134,7 @@ export function GoalFormDialog({ goal, trigger }: GoalFormDialogProps) {
                       type="button"
                       onClick={() => chooseIcon(key)}
                       className={cn(
-                        "flex size-9 items-center justify-center rounded-kubo-sm border transition-colors",
+                        "flex size-9 items-center justify-center rounded-kubo-sm border transition-colors duration-200",
                         icon === key
                           ? "border-accent bg-accent/15 text-accent"
                           : "border-border bg-surface-hover text-muted hover:text-foreground"
@@ -157,7 +157,7 @@ export function GoalFormDialog({ goal, trigger }: GoalFormDialogProps) {
                 step="0.01"
                 inputMode="decimal"
                 placeholder="0.00"
-                className="font-mono tabular"
+                className="font-mono tabular-nums"
                 onFocus={(e) => e.currentTarget.select()}
                 {...register("targetAmount", { valueAsNumber: true })}
               />

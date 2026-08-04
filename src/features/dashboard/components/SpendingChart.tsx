@@ -24,12 +24,14 @@ function ChartTooltip({
   const { formatCurrency } = useCurrency();
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-kubo-sm border border-border bg-surface px-3 py-2 text-xs shadow-kubo-lg">
-      <p className="mb-1 font-medium text-muted">{label}</p>
+    <div className="rounded-kubo-sm border border-border bg-surface px-3 py-2.5 text-xs shadow-kubo-lg">
+      <p className="mb-1.5 font-semibold text-foreground">{label}</p>
       {payload.map((entry) => (
-        <p key={entry.dataKey} className="font-mono tabular">
+        <p key={entry.dataKey} className="font-mono tabular-nums text-muted">
           {entry.dataKey === "income" ? "Ingresos: " : "Gastos: "}
-          {formatCurrency(entry.value)}
+          <span className={entry.dataKey === "income" ? "text-accent" : "text-negative"}>
+            {formatCurrency(entry.value)}
+          </span>
         </p>
       ))}
     </div>
@@ -39,55 +41,68 @@ function ChartTooltip({
 export function SpendingChart({ data }: { data: TrendPoint[] }) {
   return (
     <Card>
-      <CardHeader className="flex-row items-center justify-between">
-        <div>
-          <CardTitle>Tendencia</CardTitle>
-          <p className="mt-1 text-sm font-medium">Ingresos vs. gastos</p>
-        </div>
-        <div className="flex items-center gap-4 text-xs text-muted">
-          <span className="flex items-center gap-1.5">
-            <span className="size-2 rounded-full bg-accent" /> Ingresos
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="size-2 rounded-full bg-negative" /> Gastos
-          </span>
+      <CardHeader>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <CardTitle>Tendencia mensual</CardTitle>
+            <p className="mt-1 text-sm text-muted">Ingresos vs. gastos</p>
+          </div>
+          <div className="flex items-center gap-4 pt-0.5 text-xs text-muted">
+            <span className="flex items-center gap-1.5">
+              <span className="size-2 rounded-full bg-accent opacity-80" /> Ingresos
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="size-2 rounded-full bg-negative opacity-80" /> Gastos
+            </span>
+          </div>
         </div>
       </CardHeader>
-      <CardContent className="h-64 pl-0">
+      <CardContent className="h-60 pl-0 pt-2">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 10, right: 20, bottom: 0, left: 0 }}>
+          <AreaChart data={data} margin={{ top: 4, right: 16, bottom: 0, left: 0 }}>
             <defs>
               <linearGradient id="incomeFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--accent))" stopOpacity={0.28} />
+                <stop offset="0%" stopColor="hsl(var(--accent))" stopOpacity={0.25} />
                 <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity={0} />
               </linearGradient>
               <linearGradient id="expenseFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--negative))" stopOpacity={0.22} />
+                <stop offset="0%" stopColor="hsl(var(--negative))" stopOpacity={0.18} />
                 <stop offset="100%" stopColor="hsl(var(--negative))" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} stroke="hsl(var(--border))" strokeDasharray="3 3" />
+            <CartesianGrid
+              vertical={false}
+              stroke="hsl(var(--border))"
+              strokeDasharray="3 3"
+              strokeOpacity={0.6}
+            />
             <XAxis
               dataKey="label"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "hsl(var(--muted))", fontSize: 12 }}
+              tick={{ fill: "hsl(var(--muted))", fontSize: 11 }}
               dy={8}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "hsl(var(--muted))", fontSize: 12 }}
+              tick={{ fill: "hsl(var(--muted))", fontSize: 11 }}
               tickFormatter={(v) => formatCompactNumber(v)}
-              width={40}
+              width={38}
             />
-            <Tooltip content={<ChartTooltip />} cursor={{ stroke: "hsl(var(--border))" }} />
+            <Tooltip
+              content={<ChartTooltip />}
+              cursor={{ stroke: "hsl(var(--border))", strokeWidth: 1.5 }}
+            />
             <Area
               type="monotone"
               dataKey="income"
               stroke="hsl(var(--accent))"
               strokeWidth={2}
               fill="url(#incomeFill)"
+              dot={false}
+              activeDot={{ r: 4, strokeWidth: 0 }}
+              animationDuration={200}
             />
             <Area
               type="monotone"
@@ -95,6 +110,9 @@ export function SpendingChart({ data }: { data: TrendPoint[] }) {
               stroke="hsl(var(--negative))"
               strokeWidth={2}
               fill="url(#expenseFill)"
+              dot={false}
+              activeDot={{ r: 4, strokeWidth: 0 }}
+              animationDuration={200}
             />
           </AreaChart>
         </ResponsiveContainer>

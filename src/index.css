@@ -10,41 +10,89 @@
 @tailwind utilities;
 
 :root {
+  /* Neutral base colors */
   --bg: 228 10% 6%;
   --surface: 228 9% 10%;
   --surface-hover: 228 8% 13%;
   --border: 228 8% 17%;
   --foreground: 60 5% 93%;
   --muted: 228 6% 58%;
+  
+  /* Primary & Accent */
   --accent: 96 20% 55%;
   --accent-foreground: 228 10% 6%;
   --accent-soft: 96 20% 55%;
+  
+  /* Semantic status colors */
   --negative: 4 40% 58%;
   --negative-soft: 4 40% 58%;
+  --success: 132 53% 49%;
+  --warning: 38 92% 50%;
+  --info: 217 91% 60%;
+  
+  /* Focus/Ring */
   --ring: 96 20% 55%;
+  
+  /* Category colors (HSL) */
+  --category-food: 33 97% 53%;
+  --category-transport: 198 93% 60%;
+  --category-home: 132 53% 49%;
+  --category-health: 0 84% 60%;
+  --category-entertainment: 280 85% 67%;
+  --category-education: 188 94% 50%;
+  --category-shopping: 42 96% 56%;
+  --category-work: 242 72% 54%;
+  --category-travel: 174 77% 55%;
+  --category-pets: 330 81% 60%;
 }
 
 .light {
+  /* Neutral base colors */
   --bg: 60 20% 98%;
   --surface: 0 0% 100%;
   --surface-hover: 60 12% 95%;
   --border: 60 10% 89%;
   --foreground: 228 10% 10%;
   --muted: 228 6% 42%;
+  
+  /* Primary & Accent */
   --accent: 96 28% 34%;
   --accent-foreground: 60 20% 98%;
   --accent-soft: 96 28% 34%;
+  
+  /* Semantic status colors */
   --negative: 4 48% 42%;
   --negative-soft: 4 48% 42%;
+  --success: 132 49% 42%;
+  --warning: 38 92% 40%;
+  --info: 217 91% 50%;
+  
+  /* Focus/Ring */
   --ring: 96 28% 34%;
+  
+  /* Category colors (same across light/dark for consistency) */
+  --category-food: 33 97% 53%;
+  --category-transport: 198 93% 60%;
+  --category-home: 132 53% 49%;
+  --category-health: 0 84% 60%;
+  --category-entertainment: 280 85% 67%;
+  --category-education: 188 94% 50%;
+  --category-shopping: 42 96% 56%;
+  --category-work: 242 72% 54%;
+  --category-travel: 174 77% 55%;
+  --category-pets: 330 81% 60%;
 }
 
 * {
   border-color: hsl(var(--border));
+  /* Ensure minimum 44px touch target for interactive elements */
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
   color-scheme: dark;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 html.light {
@@ -54,11 +102,12 @@ html.light {
 body {
   @apply bg-bg text-foreground antialiased;
   font-family: "Geist Sans", system-ui, sans-serif;
+  line-height: 1.5;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .font-mono,
-.tabular {
+.tabular-nums {
   font-family: "Geist Mono", ui-monospace, monospace;
   font-feature-settings: "tnum" 1, "cv01" 1;
   font-variant-numeric: tabular-nums;
@@ -68,9 +117,10 @@ body {
   background: hsl(var(--accent) / 0.25);
 }
 
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -78,17 +128,22 @@ body {
 ::-webkit-scrollbar-thumb {
   background: hsl(var(--border));
   border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted) / 0.4);
+  background: hsl(var(--muted) / 0.35);
+  background-clip: content-box;
 }
 
+/* Focus visible — consistente en toda la app */
 :focus-visible {
-  outline: 2px solid hsl(var(--ring));
+  outline: 2px solid hsl(var(--ring) / 0.6);
   outline-offset: 2px;
   border-radius: 6px;
 }
 
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

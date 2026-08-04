@@ -111,7 +111,7 @@ export function AddCategoryDialog() {
                       type="button"
                       onClick={() => setValue("icon", icon)}
                       className={cn(
-                        "flex size-9 items-center justify-center rounded-kubo-sm border transition-colors",
+                        "flex size-9 items-center justify-center rounded-kubo-sm border transition-colors duration-200",
                         selectedIcon === icon
                           ? "border-accent bg-accent/15 text-accent"
                           : "border-border bg-surface-hover text-muted hover:text-foreground"

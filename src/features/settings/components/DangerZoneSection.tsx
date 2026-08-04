@@ -31,7 +31,7 @@ export function DangerZoneSection() {
           metas. Esta acción no se puede deshacer.
         </p>
       </CardHeader>
-      <CardContent className="pt-4">
+      <CardContent className="p-5 pt-4">
         <AlertDialog.Root
           onOpenChange={(open) => {
             if (!open) {

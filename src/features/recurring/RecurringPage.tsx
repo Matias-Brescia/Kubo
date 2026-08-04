@@ -3,7 +3,9 @@ import { Loader2, Repeat, Trash2 } from "lucide-react";
 import { Topbar } from "@/components/layout/Topbar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { EmptyState } from "@/components/ui/empty-state";
 import { useCurrency } from "@/app/providers/CurrencyProvider";
 import { getCategoryIconByKey } from "@/lib/category-icons";
 import { cn } from "@/lib/utils";
@@ -37,34 +39,25 @@ export function RecurringPage() {
     <>
       <Topbar
         title="Recurrentes"
-        subtitle="Sueldos, suscripciones y otros movimientos que se repiten solos."
+        subtitle="Sueldos, suscripciones y movimientos que se repiten solos."
         action={<RecurringFormDialog />}
       />
 
-      <div className="mt-6 px-6 md:mt-8 md:px-10">
+      <div className="mt-6 px-6 pb-10 md:mt-8 md:px-10">
         {isLoading ? (
-          <div className="flex items-center justify-center gap-2 py-16 text-sm text-muted">
+          <div className="flex items-center justify-center gap-2 py-20 text-sm text-muted">
             <Loader2 className="size-4 animate-spin" /> Cargando recurrentes...
           </div>
         ) : recurring.length === 0 ? (
-          <Card>
-            <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-              <div className="flex size-12 items-center justify-center rounded-full bg-surface-hover text-muted">
-                <Repeat className="size-5" />
-              </div>
-              <p className="text-sm font-medium">Todavía no tienes movimientos recurrentes</p>
-              <p className="max-w-xs text-sm text-muted">
-                Registra tu sueldo, alquiler o suscripciones y Kubo los agrega automáticamente cada
-                vez que abras la app.
-              </p>
-              <RecurringFormDialog
-                trigger={<Button className="mt-2">Crear mi primer recurrente</Button>}
-              />
-            </CardContent>
-          </Card>
+          <EmptyState
+            icon={Repeat}
+            title="Todavía no tienes movimientos recurrentes"
+            description="Registra tu sueldo, alquiler o suscripciones y Kubo los agrega automáticamente."
+            action={<RecurringFormDialog trigger={<Button>Crear mi primer recurrente</Button>} />}
+          />
         ) : (
           <Card>
-            <CardContent className="flex flex-col p-0">
+            <CardContent className="p-0">
               <AnimatePresence initial={false}>
                 {recurring.map((item, i) => {
                   const Icon = getCategoryIconByKey(item.categoryIcon);
@@ -72,28 +65,31 @@ export function RecurringPage() {
                     <motion.div
                       key={item.id}
                       layout
-                      initial={{ opacity: 0, y: -8 }}
+                      initial={{ opacity: 0, y: -6 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.25, ease: "easeOut", delay: i * 0.03 }}
+                      transition={{ duration: 0.2, ease: "easeOut", delay: i * 0.03 }}
                       className={cn(
-                        "flex items-center gap-3 px-5 py-4",
+                        "group flex items-center gap-3 px-5 py-3.5 transition-colors duration-200 hover:bg-surface-hover/50",
                         i !== recurring.length - 1 && "border-b border-border",
                         !item.isActive && "opacity-50"
                       )}
                     >
-                      <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover text-muted">
-                        <Icon className="size-4" />
+                      <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover">
+                        <Icon className="size-4 text-muted" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium">{item.description}</p>
-                        <p className="text-xs text-muted">
-                          {frequencyLabels[item.frequency]} · Próximo {formatDate(item.nextOccurrence)}
-                        </p>
+                        <div className="mt-0.5 flex items-center gap-1.5">
+                          <Badge variant="default" className="px-1.5 py-px text-[10px]">
+                            {frequencyLabels[item.frequency]}
+                          </Badge>
+                          <span className="text-xs text-muted">Próximo {formatDate(item.nextOccurrence)}</span>
+                        </div>
                       </div>
                       <p
                         className={cn(
-                          "shrink-0 font-mono text-sm font-medium tabular",
+                          "shrink-0 font-mono text-sm font-semibold tabular-nums",
                           item.kind === "income" ? "text-accent" : "text-foreground"
                         )}
                       >
@@ -103,16 +99,15 @@ export function RecurringPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() =>
-                            toggleRecurring.mutate({ id: item.id, isActive: !item.isActive })
-                          }
+                          aria-label={item.isActive ? "Pausar recurrente" : "Reactivar recurrente"}
+                          onClick={() => toggleRecurring.mutate({ id: item.id, isActive: !item.isActive })}
                         >
                           {item.isActive ? "Pausar" : "Reactivar"}
                         </Button>
                         <ConfirmDialog
                           trigger={
-                            <Button variant="ghost" size="icon" aria-label="Eliminar">
-                              <Trash2 className="size-4 text-negative" />
+                            <Button variant="ghost" size="icon" aria-label="Eliminar recurrente">
+                              <Trash2 className="size-3.5 text-negative" />
                             </Button>
                           }
                           title="Eliminar recurrente"

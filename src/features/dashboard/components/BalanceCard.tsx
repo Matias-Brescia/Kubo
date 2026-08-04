@@ -12,17 +12,24 @@ interface BalanceCardProps {
 
 export function BalanceCard({ balance, income, expense }: BalanceCardProps) {
   return (
-    <Card className="relative overflow-hidden p-6 md:p-8">
+    <Card className="relative overflow-hidden p-6 md:p-8" variant="elevated">
+      {/* Gradiente sutil que no distrae del contenido */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-24 -top-24 size-64 rounded-full bg-accent/10 blur-3xl"
+        className="pointer-events-none absolute -right-16 -top-16 size-56 rounded-full bg-accent/8 blur-3xl"
       />
-      <p className="text-sm font-medium text-muted">Balance total</p>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-20 -left-8 size-48 rounded-full bg-info/5 blur-3xl"
+      />
+
+      <p className="text-xs font-semibold uppercase tracking-widest text-muted">Balance total</p>
+
       <motion.div
-        initial={{ opacity: 0, y: 6 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        className="mt-2"
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        className="mt-3"
       >
         <AnimatedCurrency
           value={balance}
@@ -31,18 +38,8 @@ export function BalanceCard({ balance, income, expense }: BalanceCardProps) {
       </motion.div>
 
       <div className="mt-6 flex flex-wrap gap-3">
-        <Metric
-          icon={ArrowUpRight}
-          label="Ingresos del mes"
-          value={income}
-          tone="accent"
-        />
-        <Metric
-          icon={ArrowDownRight}
-          label="Gastos del mes"
-          value={expense}
-          tone="negative"
-        />
+        <Metric icon={ArrowUpRight} label="Ingresos del mes" value={income} tone="accent" />
+        <Metric icon={ArrowDownRight} label="Gastos del mes" value={expense} tone="negative" />
       </div>
     </Card>
   );
@@ -60,18 +57,18 @@ function Metric({
   tone: "accent" | "negative";
 }) {
   return (
-    <div className="flex items-center gap-2.5 rounded-kubo-sm border border-border bg-surface-hover px-3.5 py-2.5">
+    <div className="flex items-center gap-3 rounded-kubo-sm border border-border bg-surface-hover px-4 py-3">
       <div
         className={cn(
-          "flex size-7 items-center justify-center rounded-full",
+          "flex size-8 shrink-0 items-center justify-center rounded-full",
           tone === "accent" ? "bg-accent/15 text-accent" : "bg-negative/15 text-negative"
         )}
       >
         <Icon className="size-4" />
       </div>
       <div>
-        <p className="text-[11px] text-muted">{label}</p>
-        <AnimatedCurrency value={value} className="text-sm font-medium" />
+        <p className="text-xs text-muted">{label}</p>
+        <AnimatedCurrency value={value} className="text-sm font-semibold" />
       </div>
     </div>
   );

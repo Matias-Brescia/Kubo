@@ -53,7 +53,7 @@ export function ProfileSection() {
         <CardTitle>Perfil</CardTitle>
         <p className="mt-1 text-sm text-muted">Tu nombre y la moneda con la que trabaja Kubo.</p>
       </CardHeader>
-      <CardContent className="pt-4">
+      <CardContent className="p-5 pt-4">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">

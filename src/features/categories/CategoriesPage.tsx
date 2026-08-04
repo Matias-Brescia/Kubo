@@ -1,17 +1,18 @@
-import { Loader2, Trash2 } from "lucide-react";
+import { Loader2, Tag, Trash2 } from "lucide-react";
 import { Topbar } from "@/components/layout/Topbar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { EmptyState } from "@/components/ui/empty-state";
 import { getCategoryIconByKey } from "@/lib/category-icons";
 import { useCategories, useDeleteCategory } from "./hooks";
 import { AddCategoryDialog } from "./components/AddCategoryDialog";
 
-const kindLabels: Record<string, string> = {
-  expense: "Gasto",
-  income: "Ingreso",
-  both: "Ambos",
+const kindLabels: Record<string, { label: string; variant: "default" | "accent" | "info" }> = {
+  expense: { label: "Gasto", variant: "default" },
+  income: { label: "Ingreso", variant: "accent" },
+  both: { label: "Ambos", variant: "info" },
 };
 
 export function CategoriesPage() {
@@ -22,37 +23,50 @@ export function CategoriesPage() {
     <>
       <Topbar
         title="Categorías"
-        subtitle="Organiza tus movimientos como quieras."
+        subtitle="Organiza tus movimientos por tipo de gasto o ingreso."
         action={<AddCategoryDialog />}
       />
 
-      <div className="mt-6 px-6 md:mt-8 md:px-10">
-        <Card>
-          <CardContent className="p-0">
-            {isLoading ? (
-              <div className="flex items-center justify-center gap-2 py-16 text-sm text-muted">
-                <Loader2 className="size-4 animate-spin" /> Cargando categorías...
-              </div>
-            ) : (
-              <ul className="divide-y divide-border">
-                {categories.map((cat) => {
+      <div className="mt-6 px-6 pb-10 md:mt-8 md:px-10">
+        {isLoading ? (
+          <div className="flex items-center justify-center gap-2 py-20 text-sm text-muted">
+            <Loader2 className="size-4 animate-spin" /> Cargando categorías...
+          </div>
+        ) : categories.length === 0 ? (
+          <EmptyState
+            icon={Tag}
+            title="Todavía no tienes categorías"
+            description="Crea categorías para organizar tus gastos e ingresos."
+            action={<AddCategoryDialog />}
+          />
+        ) : (
+          <Card>
+            <CardContent className="p-0">
+              <ul role="list">
+                {categories.map((cat, i) => {
                   const Icon = getCategoryIconByKey(cat.icon);
+                  const meta = kindLabels[cat.kind] ?? kindLabels.both;
                   return (
-                    <li key={cat.id} className="group flex items-center gap-3 px-5 py-3.5">
-                      <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover text-muted">
-                        <Icon className="size-4" />
+                    <li
+                      key={cat.id}
+                      className={`group flex items-center gap-3 px-5 py-3.5 transition-colors duration-200 hover:bg-surface-hover/50 ${
+                        i !== categories.length - 1 ? "border-b border-border" : ""
+                      }`}
+                    >
+                      <div className="flex size-9 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover">
+                        <Icon className="size-4 text-muted" aria-hidden="true" />
                       </div>
                       <p className="flex-1 text-sm font-medium">{cat.name}</p>
-                      <Badge variant="default">{kindLabels[cat.kind]}</Badge>
+                      <Badge variant={meta.variant}>{meta.label}</Badge>
                       <ConfirmDialog
                         trigger={
                           <Button
                             variant="ghost"
                             size="icon"
-                            aria-label="Eliminar categoría"
-                            className="opacity-0 transition-opacity group-hover:opacity-100"
+                            aria-label={`Eliminar categoría ${cat.name}`}
+                            className="opacity-0 transition-opacity duration-200 group-hover:opacity-100"
                           >
-                            <Trash2 className="size-4 text-negative" />
+                            <Trash2 className="size-3.5 text-negative" />
                           </Button>
                         }
                         title="Eliminar categoría"
@@ -64,9 +78,9 @@ export function CategoriesPage() {
                   );
                 })}
               </ul>
-            )}
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </>
   );

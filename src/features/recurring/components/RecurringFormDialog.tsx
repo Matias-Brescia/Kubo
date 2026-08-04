@@ -111,7 +111,7 @@ export function RecurringFormDialog({ trigger }: { trigger?: ReactNode }) {
                     setValue("kind", k);
                   }}
                   className={cn(
-                    "rounded-[8px] py-2 text-sm font-medium transition-colors",
+                    "rounded-kubo-sm py-2 text-sm font-medium transition-colors duration-200",
                     kind === k ? "bg-surface text-foreground shadow-kubo" : "text-muted"
                   )}
                 >
@@ -146,7 +146,7 @@ export function RecurringFormDialog({ trigger }: { trigger?: ReactNode }) {
                   step="0.01"
                   inputMode="decimal"
                   placeholder="0.00"
-                  className="font-mono tabular"
+                  className="font-mono tabular-nums"
                   onFocus={(e) => e.currentTarget.select()}
                   {...register("amount", { valueAsNumber: true })}
                 />

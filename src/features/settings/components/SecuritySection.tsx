@@ -60,7 +60,7 @@ export function SecuritySection() {
         <CardTitle>Seguridad</CardTitle>
         <p className="mt-1 text-sm text-muted">Correo de acceso y contraseña.</p>
       </CardHeader>
-      <CardContent className="flex flex-col gap-6 pt-4">
+      <CardContent className="flex flex-col gap-5 pt-4">
         <form onSubmit={emailForm.handleSubmit(onEmailSubmit)} className="flex flex-col gap-3">
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-medium text-muted" htmlFor="email">

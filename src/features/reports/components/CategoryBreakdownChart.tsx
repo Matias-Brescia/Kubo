@@ -27,7 +27,7 @@ function BreakdownTooltip({
   return (
     <div className="rounded-kubo-sm border border-border bg-surface px-3 py-2 text-xs shadow-kubo-lg">
       <p className="font-medium">{item.name}</p>
-      <p className="font-mono tabular">{formatCurrency(item.amount)}</p>
+      <p className="font-mono tabular-nums">{formatCurrency(item.amount)}</p>
     </div>
   );
 }
@@ -85,11 +85,11 @@ export function CategoryBreakdownChart({ data }: { data: CategoryBreakdownItem[]
             const Icon = getCategoryIconByKey(item.icon);
             return (
               <div key={item.name} className="flex items-center gap-2.5 text-sm">
-                <div className="flex size-7 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover text-muted">
-                  <Icon className="size-3.5" />
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-kubo-sm bg-surface-hover">
+                  <Icon className="size-4 text-muted" />
                 </div>
                 <span className="flex-1 truncate">{item.name}</span>
-                <span className="font-mono tabular text-muted">{formatCurrency(item.amount)}</span>
+                <span className="font-mono tabular-nums text-muted">{formatCurrency(item.amount)}</span>
               </div>
             );
           })}

@@ -10,5 +10,17 @@ interface AnimatedCurrencyProps {
 export function AnimatedCurrency({ value, className }: AnimatedCurrencyProps) {
   const animated = useAnimatedNumber(value);
   const { formatCurrency } = useCurrency();
-  return <span className={cn("font-mono tabular", className)}>{formatCurrency(animated)}</span>;
+  const formatted = formatCurrency(animated);
+  const real = formatCurrency(value);
+
+  return (
+    <span
+      className={cn("font-mono tabular-nums", className)}
+      aria-label={real}
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      {formatted}
+    </span>
+  );
 }

@@ -39,7 +39,7 @@ export function ReportsPage() {
         }
       />
 
-      <div className="mt-6 grid gap-5 px-6 md:mt-8 md:grid-cols-3 md:px-10">
+      <div className="mt-8 grid gap-6 px-6 md:mt-10 md:grid-cols-3 md:px-10">
         <StatCard
           icon={TrendingUp}
           label="Ingresos del mes"
@@ -60,7 +60,7 @@ export function ReportsPage() {
         />
       </div>
 
-      <div className="mt-5 grid gap-5 px-6 md:grid-cols-2 md:px-10">
+      <div className="mt-6 grid gap-6 px-6 md:grid-cols-2 md:px-10">
         <CategoryBreakdownChart data={breakdown} />
         <HistoricalTrendChart data={historical} />
       </div>

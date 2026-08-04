@@ -9,15 +9,15 @@ interface TopbarProps {
 
 export function Topbar({ title, subtitle, action }: TopbarProps) {
   return (
-    <header className="flex items-center justify-between gap-4 px-6 pt-6 md:px-10 md:pt-10">
+    <header className="flex items-start justify-between gap-4 px-6 pt-8 md:px-10 md:pt-10">
       <div className="flex items-center gap-3">
         <MobileNav />
         <div>
-          <h1 className="text-xl font-semibold tracking-tight md:text-2xl">{title}</h1>
-          {subtitle && <p className="mt-0.5 text-sm text-muted">{subtitle}</p>}
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">{title}</h1>
+          {subtitle && <p className="mt-1 text-sm text-muted">{subtitle}</p>}
         </div>
       </div>
-      {action}
+      {action && <div className="shrink-0 pt-1">{action}</div>}
     </header>
   );
 }
