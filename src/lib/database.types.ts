@@ -1,0 +1,83 @@
+export type TransactionKind = "income" | "expense";
+export type CategoryKind = "income" | "expense" | "both";
+
+export interface Database {
+  public: {
+    Tables: {
+      profiles: {
+        Row: {
+          id: string;
+          full_name: string | null;
+          currency: string;
+          created_at: string;
+        };
+        Insert: {
+          id: string;
+          full_name?: string | null;
+          currency?: string;
+        };
+        Update: {
+          full_name?: string | null;
+          currency?: string;
+        };
+        Relationships: [];
+      };
+      categories: {
+        Row: {
+          id: string;
+          user_id: string;
+          name: string;
+          kind: CategoryKind;
+          icon: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          name: string;
+          kind: CategoryKind;
+          icon?: string;
+        };
+        Update: {
+          name?: string;
+          kind?: CategoryKind;
+          icon?: string;
+        };
+        Relationships: [];
+      };
+      transactions: {
+        Row: {
+          id: string;
+          user_id: string;
+          category_id: string | null;
+          description: string;
+          amount: number;
+          kind: TransactionKind;
+          occurred_on: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          category_id?: string | null;
+          description: string;
+          amount: number;
+          kind: TransactionKind;
+          occurred_on?: string;
+        };
+        Update: {
+          category_id?: string | null;
+          description?: string;
+          amount?: number;
+          kind?: TransactionKind;
+          occurred_on?: string;
+        };
+        Relationships: [];
+      };
+    };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
+  };
+}

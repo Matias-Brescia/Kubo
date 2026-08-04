@@ -1,9 +1,10 @@
 import { NavLink } from "react-router-dom";
-import { Moon, Sun } from "lucide-react";
+import { LogOut, Moon, Sun } from "lucide-react";
 import { Logo } from "./Logo";
 import { navItems, settingsItem } from "./nav-config";
 import { cn } from "@/lib/utils";
 import { useThemeContext } from "@/app/providers/ThemeProvider";
+import { useAuth } from "@/features/auth/AuthProvider";
 
 function NavRow({ item }: { item: (typeof navItems)[number] }) {
   const Icon = item.icon;
@@ -42,6 +43,7 @@ function NavRow({ item }: { item: (typeof navItems)[number] }) {
 
 export function Sidebar() {
   const { theme, toggleTheme } = useThemeContext();
+  const { user, signOut } = useAuth();
 
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-border bg-bg px-4 py-6 md:flex">
@@ -69,6 +71,22 @@ export function Sidebar() {
           )}
           {theme === "dark" ? "Modo claro" : "Modo oscuro"}
         </button>
+
+        {user && (
+          <div className="mt-2 flex items-center gap-2.5 rounded-kubo-sm border border-border bg-surface-hover px-3 py-2.5">
+            <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-accent/15 text-xs font-semibold text-accent">
+              {user.email?.[0]?.toUpperCase()}
+            </div>
+            <p className="min-w-0 flex-1 truncate text-xs text-muted">{user.email}</p>
+            <button
+              onClick={signOut}
+              aria-label="Cerrar sesión"
+              className="flex size-6 shrink-0 items-center justify-center rounded-[6px] text-muted hover:bg-surface hover:text-negative"
+            >
+              <LogOut className="size-3.5" />
+            </button>
+          </div>
+        )}
       </div>
     </aside>
   );

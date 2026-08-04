@@ -2,8 +2,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { formatSignedCurrency } from "@/lib/currency";
 import { cn } from "@/lib/utils";
-import { getCategoryIcon } from "../utils/category-icons";
-import type { Transaction } from "../types";
+import { getCategoryIconByKey } from "@/lib/category-icons";
+import type { Transaction } from "@/features/transactions/hooks";
 
 function formatDate(iso: string) {
   return new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short" }).format(
@@ -26,7 +26,7 @@ export function TransactionList({ transactions }: { transactions: Transaction[] 
           <ul className="flex flex-col">
             <AnimatePresence initial={false}>
               {transactions.map((tx, i) => {
-                const Icon = getCategoryIcon(tx.category);
+                const Icon = getCategoryIconByKey(tx.categoryIcon);
                 return (
                   <motion.li
                     key={tx.id}
@@ -44,7 +44,7 @@ export function TransactionList({ transactions }: { transactions: Transaction[] 
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium">{tx.description}</p>
                       <p className="text-xs text-muted">
-                        {tx.category} · {formatDate(tx.date)}
+                        {tx.categoryName} · {formatDate(tx.occurredOn)}
                       </p>
                     </div>
                     <p
