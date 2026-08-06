@@ -64,3 +64,14 @@ export function isIsoTodayOrPast(iso: string): boolean {
 export function yesterdayLocal(): string {
   return addDaysIso(todayLocal(), -1);
 }
+
+/**
+ * Formato largo reutilizado en Goals, Recurring y el diálogo de
+ * Transacciones: "2 ago 2026". Antes vivía copiado de forma idéntica
+ * en cada uno de esos archivos.
+ */
+export function formatDateLong(iso: string): string {
+  return new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(
+    parseLocalIso(iso)
+  );
+}

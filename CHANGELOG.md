@@ -4,6 +4,23 @@ Historial de versiones del proyecto, de la más reciente a la más antigua. Cada
 
 ---
 
+## v0.5.2
+
+Auditoría de calidad de código sobre la base de v0.5.1. Sin funcionalidad nueva, sin cambios de diseño ni de UX — objetivo único: código más limpio, consistente y mantenible.
+
+- **Corregido**: `TRANSACTIONS_KEY` (clave de invalidación de caché de TanStack Query) estaba definida dos veces y usada como string suelto una tercera vez, en 3 archivos distintos. Consolidada en una sola fuente de verdad exportada desde `features/transactions/hooks.ts`
+- **Refactorizado**: 6 diálogos de formulario (Transacción, Recurrente, Meta, Presupuesto, Categoría, Aporte a meta) que repetían un shell de ~280 caracteres idénticos (overlay, posicionamiento, header) ahora comparten `components/ui/form-dialog-shell.tsx`. De paso se corrigió una inconsistencia real: el botón de cerrar tenía una clase `transition-colors duration-200` en 2 de los 6, ausente en los otros 4 — el wrapper ahora aplica un único comportamiento correcto
+- **Corregido**: residuo `duration-200 duration-150` en el menú de fecha de Transacciones dejaba el timing real del hover en 150ms en vez de los 200ms consistentes con el resto de la app
+- **Simplificado**: 3 copias idénticas de una función de formateo de fecha (Metas, Recurrentes, diálogo de Transacción) consolidadas en `formatDateLong()` dentro de `lib/date.ts`
+- **Simplificado**: alias `const today = todayLocal` / `const yesterday = yesterdayLocal` en `TransactionFormDialog` eliminados — llamaban directo a las funciones sin aportar nada
+- **Eliminado**: `components/ui/table.tsx` — componente sin ningún uso en el proyecto (confirmado con búsqueda exhaustiva y build sin él)
+- **Eliminado**: dependencias `@radix-ui/react-dropdown-menu` y `@radix-ui/react-tabs` del `package.json` — sin ningún import en `src/`
+- **Organización**: activado `strict: true` en `tsconfig.app.json`. El código ya era compatible (0 errores nuevos al probarlo), solo faltaba declararlo — protege contra regresiones de tipos en versiones futuras
+- **Organización**: `package.json` `"version"` corregido de `0.2.0` a `0.5.2` — llevaba sin actualizarse desde v0.2
+- **Organización**: README sincronizado con el estado real del proyecto (ya no dice "v0.2"); este `CHANGELOG.md` pasa a vivir dentro del proyecto desde esta versión
+
+> Detalle completo de la auditoría, incluyendo hallazgos documentados pero no aplicados (con su justificación), en el informe técnico entregado junto con esta versión.
+
 ## v0.5.1
 
 - **Sidebar tipo Notion** — altura fija de viewport, posición sticky, scroll independiente en el menú, perfil y ajustes siempre visibles; ya no crece con el contenido de la página

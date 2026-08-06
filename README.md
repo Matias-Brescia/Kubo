@@ -86,15 +86,19 @@ pnpm preview
 ```
 
 > **Nota:** si abres el proyecto sin configurar `.env`, Kubo muestra una pantalla con instrucciones en vez de fallar en blanco.
-## Novedades de esta versión — v0.5.1
 
-- **Sidebar tipo Notion** — altura fija de viewport, posición sticky, scroll independiente en el menú, perfil y ajustes siempre visibles; ya no crece con el contenido de la página
-- **Corrección de un bug de fechas** en recurrentes, transacciones, reportes y exportación CSV: las fechas de calendario (`YYYY-MM-DD`) se interpretaban como instantes UTC en vez de días locales, lo que podía correr el día mostrado o guardado en zonas horarias con offset negativo (como Perú). Se corrigió con helpers de fecha local puros (`src/lib/date.ts`) en los 9 puntos afectados
-- **Color funcional de categorías** aplicado en toda la app — íconos de categoría en Transacciones, Presupuestos, Metas, Categorías, Recurrentes y gráficos de Reportes ahora usan su color correspondiente (antes definido en tokens pero sin usarse)
-- **Contraste corregido en modo claro** — 7 de los 10 colores de categoría no cumplían el mínimo de contraste WCAG AA sobre fondo claro; se ajustó su luminosidad manteniendo el mismo tono, sin tocar el modo oscuro
-- Consistencia visual: overlays de diálogo, botones de acción destructiva y gráficos de Reportes alineados al mismo patrón visual
-- QA funcional completo: registro, login, logout, CRUD de transacciones/presupuestos/metas/categorías/recurrentes, reportes, ajustes, responsive y navegación revisados sin bugs abiertos
-- Todo lo de v0.1 a v0.5 se mantiene
+## Novedades de esta versión — v0.5.2
+
+Auditoría de calidad de código sobre la base estable de v0.5.1. Sin funcionalidad nueva, sin cambios de diseño ni de experiencia de usuario — el objetivo único fue dejar el código más limpio, consistente y mantenible antes de tomarlo como base pública.
+
+- **Corregido un riesgo real de caché desincronizada** — la clave de invalidación de queries de transacciones (`TRANSACTIONS_KEY`) estaba definida dos veces y usada como string suelto una tercera vez; ahora tiene una sola fuente de verdad
+- **6 diálogos de formulario consolidados** en un shell compartido (`FormDialogShell`) — eliminando ~280 caracteres de clases duplicadas de forma idéntica en cada uno, y corrigiendo una inconsistencia real de timing (`duration-200 duration-150` residual dejaba el cierre del menú de fecha en 150ms en vez de 200ms)
+- **3 copias idénticas de formateo de fecha** consolidadas en un solo helper (`formatDateLong` en `lib/date.ts`)
+- Eliminado `components/ui/table.tsx`, un componente sin ningún uso en el proyecto
+- Eliminadas 2 dependencias sin uso del `package.json` (`@radix-ui/react-dropdown-menu`, `@radix-ui/react-tabs`)
+- Activado `strict: true` en TypeScript — el código ya era compatible, solo faltaba declararlo (protege contra regresiones futuras)
+- `package.json` `"version"` corregido — llevaba desde v0.2 sin actualizarse
+- Ver `CHANGELOG.md` en la raíz del proyecto para el detalle técnico completo
 
 ## Próximas entregas
 

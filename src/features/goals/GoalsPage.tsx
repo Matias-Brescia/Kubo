@@ -11,16 +11,10 @@ import { AnimatedCurrency } from "@/components/shared/AnimatedCurrency";
 import { useCurrency } from "@/app/providers/CurrencyProvider";
 import { getCategoryIconByKey, getCategoryColorByKey } from "@/lib/category-icons";
 import { cn } from "@/lib/utils";
-import { parseLocalIso } from "@/lib/date";
+import { formatDateLong } from "@/lib/date";
 import { useGoals, useDeleteGoal } from "./hooks";
 import { GoalFormDialog } from "./components/GoalFormDialog";
 import { AddContributionDialog } from "./components/AddContributionDialog";
-
-function formatDate(iso: string) {
-  return new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(
-    parseLocalIso(iso)
-  );
-}
 
 export function GoalsPage() {
   const { data: goals = [], isLoading } = useGoals();
@@ -73,7 +67,7 @@ export function GoalsPage() {
                           <div>
                             <p className="text-sm font-semibold">{goal.name}</p>
                             {goal.targetDate && (
-                              <p className="text-xs text-muted">Para {formatDate(goal.targetDate)}</p>
+                              <p className="text-xs text-muted">Para {formatDateLong(goal.targetDate)}</p>
                             )}
                           </div>
                         </div>

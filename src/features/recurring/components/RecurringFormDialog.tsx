@@ -1,12 +1,12 @@
 import { useState, type ReactNode } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Plus, X } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
+import { FormDialogShell } from "@/components/ui/form-dialog-shell";
 import { cn } from "@/lib/utils";
 import { useCategories } from "@/features/categories/hooks";
 import { useCreateRecurring } from "../hooks";
@@ -71,136 +71,120 @@ export function RecurringFormDialog({ trigger }: { trigger?: ReactNode }) {
   };
 
   return (
-    <Dialog.Root
+    <FormDialogShell
       open={open}
       onOpenChange={(next) => {
         setOpen(next);
         if (!next) setKind("expense");
       }}
-    >
-      <Dialog.Trigger asChild>
-        {trigger ?? (
+      trigger={
+        trigger ?? (
           <Button size="lg">
             <Plus className="size-4" />
             Nuevo recurrente
           </Button>
-        )}
-      </Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/60 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-kubo border border-border bg-surface p-6 shadow-kubo-lg outline-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95">
-          <div className="flex items-center justify-between">
-            <Dialog.Title className="text-base font-semibold">Nuevo recurrente</Dialog.Title>
-            <Dialog.Close asChild>
-              <button
-                className="flex size-7 items-center justify-center rounded-kubo-sm text-muted hover:bg-surface-hover hover:text-foreground"
-                aria-label="Cerrar"
-              >
-                <X className="size-4" />
-              </button>
-            </Dialog.Close>
+        )
+      }
+      title="Nuevo recurrente"
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-5 flex flex-col gap-4">
+        <div className="grid grid-cols-2 gap-1 rounded-kubo-sm border border-border bg-surface-hover p-1">
+          {(["expense", "income"] as TransactionKind[]).map((k) => (
+            <button
+              key={k}
+              type="button"
+              onClick={() => {
+                setKind(k);
+                setValue("kind", k);
+              }}
+              className={cn(
+                "rounded-kubo-sm py-2 text-sm font-medium transition-colors duration-200",
+                kind === k ? "bg-surface text-foreground shadow-kubo" : "text-muted"
+              )}
+            >
+              {k === "expense" ? "Gasto" : "Ingreso"}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-medium text-muted" htmlFor="description">
+            Descripción
+          </label>
+          <Input
+            id="description"
+            autoFocus
+            placeholder="Ej. Sueldo, Netflix, Alquiler..."
+            {...register("description")}
+          />
+          {errors.description && (
+            <p className="text-xs text-negative">{errors.description.message}</p>
+          )}
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-medium text-muted" htmlFor="amount">
+              Monto
+            </label>
+            <Input
+              id="amount"
+              type="number"
+              step="0.01"
+              inputMode="decimal"
+              placeholder="0.00"
+              className="font-mono tabular-nums"
+              onFocus={(e) => e.currentTarget.select()}
+              {...register("amount", { valueAsNumber: true })}
+            />
+            {errors.amount && <p className="text-xs text-negative">{errors.amount.message}</p>}
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-5 flex flex-col gap-4">
-            <div className="grid grid-cols-2 gap-1 rounded-kubo-sm border border-border bg-surface-hover p-1">
-              {(["expense", "income"] as TransactionKind[]).map((k) => (
-                <button
-                  key={k}
-                  type="button"
-                  onClick={() => {
-                    setKind(k);
-                    setValue("kind", k);
-                  }}
-                  className={cn(
-                    "rounded-kubo-sm py-2 text-sm font-medium transition-colors duration-200",
-                    kind === k ? "bg-surface text-foreground shadow-kubo" : "text-muted"
-                  )}
-                >
-                  {k === "expense" ? "Gasto" : "Ingreso"}
-                </button>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-medium text-muted" htmlFor="frequency">
+              Frecuencia
+            </label>
+            <Select id="frequency" {...register("frequency")}>
+              {(Object.keys(frequencyLabels) as RecurringFrequency[]).map((f) => (
+                <option key={f} value={f}>
+                  {frequencyLabels[f]}
+                </option>
               ))}
-            </div>
+            </Select>
+          </div>
+        </div>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-muted" htmlFor="description">
-                Descripción
-              </label>
-              <Input
-                id="description"
-                autoFocus
-                placeholder="Ej. Sueldo, Netflix, Alquiler..."
-                {...register("description")}
-              />
-              {errors.description && (
-                <p className="text-xs text-negative">{errors.description.message}</p>
-              )}
-            </div>
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-medium text-muted" htmlFor="categoryId">
+            Categoría
+          </label>
+          <Select id="categoryId" {...register("categoryId")}>
+            {relevantCategories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </Select>
+          {errors.categoryId && (
+            <p className="text-xs text-negative">{errors.categoryId.message}</p>
+          )}
+        </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-medium text-muted" htmlFor="amount">
-                  Monto
-                </label>
-                <Input
-                  id="amount"
-                  type="number"
-                  step="0.01"
-                  inputMode="decimal"
-                  placeholder="0.00"
-                  className="font-mono tabular-nums"
-                  onFocus={(e) => e.currentTarget.select()}
-                  {...register("amount", { valueAsNumber: true })}
-                />
-                {errors.amount && <p className="text-xs text-negative">{errors.amount.message}</p>}
-              </div>
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-medium text-muted" htmlFor="startDate">
+            Primera fecha
+          </label>
+          <Input id="startDate" type="date" {...register("startDate")} />
+          {errors.startDate && (
+            <p className="text-xs text-negative">{errors.startDate.message}</p>
+          )}
+        </div>
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-medium text-muted" htmlFor="frequency">
-                  Frecuencia
-                </label>
-                <Select id="frequency" {...register("frequency")}>
-                  {(Object.keys(frequencyLabels) as RecurringFrequency[]).map((f) => (
-                    <option key={f} value={f}>
-                      {frequencyLabels[f]}
-                    </option>
-                  ))}
-                </Select>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-muted" htmlFor="categoryId">
-                Categoría
-              </label>
-              <Select id="categoryId" {...register("categoryId")}>
-                {relevantCategories.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </Select>
-              {errors.categoryId && (
-                <p className="text-xs text-negative">{errors.categoryId.message}</p>
-              )}
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-muted" htmlFor="startDate">
-                Primera fecha
-              </label>
-              <Input id="startDate" type="date" {...register("startDate")} />
-              {errors.startDate && (
-                <p className="text-xs text-negative">{errors.startDate.message}</p>
-              )}
-            </div>
-
-            <Button type="submit" size="lg" disabled={createRecurring.isPending} className="mt-1">
-              {createRecurring.isPending && <Loader2 className="size-4 animate-spin" />}
-              Crear recurrente
-            </Button>
-          </form>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+        <Button type="submit" size="lg" disabled={createRecurring.isPending} className="mt-1">
+          {createRecurring.isPending && <Loader2 className="size-4 animate-spin" />}
+          Crear recurrente
+        </Button>
+      </form>
+    </FormDialogShell>
   );
 }

@@ -8,7 +8,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useCurrency } from "@/app/providers/CurrencyProvider";
 import { getCategoryIconByKey, getCategoryColorByKey } from "@/lib/category-icons";
-import { parseLocalIso } from "@/lib/date";
+import { formatDateLong } from "@/lib/date";
 import { cn } from "@/lib/utils";
 import {
   useRecurringTransactions,
@@ -23,12 +23,6 @@ const frequencyLabels: Record<RecurringFrequency, string> = {
   monthly: "Mensual",
   yearly: "Anual",
 };
-
-function formatDate(iso: string) {
-  return new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(
-    parseLocalIso(iso)
-  );
-}
 
 export function RecurringPage() {
   const { data: recurring = [], isLoading } = useRecurringTransactions();
@@ -85,7 +79,7 @@ export function RecurringPage() {
                           <Badge variant="default" className="px-1.5 py-px text-[10px]">
                             {frequencyLabels[item.frequency]}
                           </Badge>
-                          <span className="text-xs text-muted">Próximo {formatDate(item.nextOccurrence)}</span>
+                          <span className="text-xs text-muted">Próximo {formatDateLong(item.nextOccurrence)}</span>
                         </div>
                       </div>
                       <p

@@ -23,7 +23,13 @@ export interface TransactionInput {
   occurredOn?: string;
 }
 
-const TRANSACTIONS_KEY = "transactions";
+/**
+ * Exportada porque otras features (recurring, categories) también
+ * necesitan invalidar la caché de transacciones tras sus propias
+ * mutaciones — deben importar esta constante en vez de redefinirla,
+ * para que un futuro cambio de key no las deje desincronizadas.
+ */
+export const TRANSACTIONS_KEY = "transactions";
 
 interface RawTransaction {
   id: string;

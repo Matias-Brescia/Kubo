@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { addDaysIso, addMonthsIso, addYearsIso, isIsoTodayOrPast } from "@/lib/date";
+import { TRANSACTIONS_KEY } from "@/features/transactions/hooks";
 import type { RecurringFrequency, TransactionKind } from "@/lib/database.types";
 
 export interface RecurringTransaction {
@@ -28,7 +29,6 @@ export interface RecurringInput {
 }
 
 const RECURRING_KEY = "recurring-transactions";
-const TRANSACTIONS_KEY = "transactions";
 
 interface RawRecurring {
   id: string;

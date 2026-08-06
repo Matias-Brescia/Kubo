@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/features/auth/AuthProvider";
+import { TRANSACTIONS_KEY } from "@/features/transactions/hooks";
 import type { CategoryKind } from "@/lib/database.types";
 
 export interface Category {
@@ -60,7 +61,7 @@ export function useDeleteCategory() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [CATEGORIES_KEY] });
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: [TRANSACTIONS_KEY] });
     },
   });
 }
