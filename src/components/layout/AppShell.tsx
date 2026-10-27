@@ -8,10 +8,15 @@ export function AppShell({ children }: { children: ReactNode }) {
   // entre el usuario primero.
   useRunDueRecurringTransactions();
 
+  // Desktop (md+): altura fija de viewport; el sidebar queda quieto y solo
+  // `main` hace scroll. Móvil: no hay sidebar, así que la página scrollea
+  // normal — con un contenedor de altura fija + scroll interno, los
+  // navegadores móviles no pueden colapsar su barra de URL y `100vh` incluye
+  // el área tapada por ella.
   return (
-    <div className="flex h-screen overflow-hidden bg-bg text-foreground">
+    <div className="flex min-h-dvh bg-bg text-foreground md:h-screen md:overflow-hidden">
       <Sidebar />
-      <main className="flex-1 overflow-y-auto pb-16">{children}</main>
+      <main className="flex-1 pb-16 md:overflow-y-auto">{children}</main>
     </div>
   );
 }

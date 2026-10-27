@@ -4,6 +4,20 @@ Historial de versiones del proyecto, de la más reciente a la más antigua. Cada
 
 ---
 
+## v0.5.3
+
+Versión visual y de layout. Sin migración de Supabase, sin cambios de lógica de negocio.
+
+- **Corregido**: espacio vacío bajo el Balance en desktop. El Dashboard tenía dos filas de grid y la fila superior se estiraba hasta la altura de la columna de tarjetas. Ahora son dos columnas independientes (izquierda: Balance + Tendencia; derecha: Ahorro + Mayor gasto + Actividad reciente). En móvil se mantiene el orden anterior (Balance → tarjetas → gráfico → actividad) mediante `contents` + `order`
+- **Corregido**: `AppShell` usaba `h-screen overflow-hidden` también en móvil. En navegadores móviles eso impide que la barra de URL se colapse y `100vh` incluye el área que ella tapa. Ahora la altura fija con scroll interno aplica solo desde `md`; en móvil `min-h-dvh` con scroll normal de la página. Desktop sin cambios
+- **Agregado**: 50 íconos nuevos (de 15 a 65) para categorías, agrupados por tema y con color asignado desde la paleta de categoría existente. Sin colores nuevos y sin cambios en los 15 íconos previos (verificado: mismo color que en v0.5.2). Íconos de metas: de 10 a 15
+- **Agregado**: el selector de íconos de categorías y metas muestra el color asignado al seleccionar; el selector de categorías tiene scroll interno (`max-h-48`)
+- **Refactorizado**: `lib/category-icons.tsx` pasa de dos mapas paralelos (clase Tailwind y variable CSS) a una única tabla `iconDefs` ícono → componente → color. Las funciones exportadas no cambian de firma. Las claves de ícono se guardan en la base de datos: no deben renombrarse
+- **Documentado (decisión de producto)**: las Metas no se suman al saldo; un aporte solo actualiza `current_amount` de la meta y no crea una transacción
+- **Organización**: `package.json` a `0.5.3`; README sincronizado
+
+> **Riesgo conocido:** estos cambios son de layout y no se pudieron verificar visualmente en navegador al construirlos. Conviene revisar el Dashboard en desktop y móvil, y los selectores de íconos, antes de darla por estable.
+
 ## v0.5.2
 
 Auditoría de calidad de código sobre la base de v0.5.1. Sin funcionalidad nueva, sin cambios de diseño ni de UX — objetivo único: código más limpio, consistente y mantenible.

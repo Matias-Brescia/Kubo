@@ -87,19 +87,17 @@ pnpm preview
 
 > **Nota:** si abres el proyecto sin configurar `.env`, Kubo muestra una pantalla con instrucciones en vez de fallar en blanco.
 
-## Novedades de esta versión — v0.5.2
+## Novedades de esta versión — v0.5.3
 
-Auditoría de calidad de código sobre la base estable de v0.5.1. Sin funcionalidad nueva, sin cambios de diseño ni de experiencia de usuario — el objetivo único fue dejar el código más limpio, consistente y mantenible antes de tomarlo como base pública.
+Versión visual y de layout. Sin cambios de datos ni de Supabase, sin cambios de lógica.
 
-- **Corregido un riesgo real de caché desincronizada** — la clave de invalidación de queries de transacciones (`TRANSACTIONS_KEY`) estaba definida dos veces y usada como string suelto una tercera vez; ahora tiene una sola fuente de verdad
-- **6 diálogos de formulario consolidados** en un shell compartido (`FormDialogShell`) — eliminando ~280 caracteres de clases duplicadas de forma idéntica en cada uno, y corrigiendo una inconsistencia real de timing (`duration-200 duration-150` residual dejaba el cierre del menú de fecha en 150ms en vez de 200ms)
-- **3 copias idénticas de formateo de fecha** consolidadas en un solo helper (`formatDateLong` en `lib/date.ts`)
-- Eliminado `components/ui/table.tsx`, un componente sin ningún uso en el proyecto
-- Eliminadas 2 dependencias sin uso del `package.json` (`@radix-ui/react-dropdown-menu`, `@radix-ui/react-tabs`)
-- Activado `strict: true` en TypeScript — el código ya era compatible, solo faltaba declararlo (protege contra regresiones futuras)
-- `package.json` `"version"` corregido — llevaba desde v0.2 sin actualizarse
-- Ver `CHANGELOG.md` en la raíz del proyecto para el detalle técnico completo
+- **Dashboard sin hueco en desktop** — el gráfico de Tendencia sube bajo el Balance; las tarjetas de Ahorro/Mayor gasto y la Actividad reciente forman la columna derecha. En móvil se conserva el orden de siempre
+- **Más íconos** — de 15 a 65, agrupados por tema (comida, transporte, hogar, salud, ocio, educación, compras, trabajo y dinero, viajes, mascotas). El color de cada ícono lo asigna la paleta existente; al elegirlo en el selector se ve el color que tendrá. Las metas pasan de 10 a 15 íconos
+- **Layout móvil** — la página vuelve al scroll normal en móvil (la barra del navegador puede colapsar y no se corta el final); la altura fija con sidebar sticky se mantiene en desktop
+- **Íconos centralizados** — una sola tabla ícono → componente → color reemplaza los dos mapas paralelos
+- **Comportamiento intencional** — las Metas no se suman al saldo: los aportes solo actualizan la meta. Es una decisión de producto, no un bug
+- Ver `CHANGELOG.md` para el detalle
 
 ## Próximas entregas
 
-- A definir.
+- **v0.6.0** — color elegible para categorías y metas (solo dentro de la paleta; requiere migración en Supabase), reforma visual más atractiva y tema claro menos opaco.

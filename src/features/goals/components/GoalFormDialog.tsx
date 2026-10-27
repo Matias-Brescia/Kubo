@@ -6,7 +6,11 @@ import { Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FormDialogShell } from "@/components/ui/form-dialog-shell";
-import { getCategoryIconByKey, availableGoalIcons } from "@/lib/category-icons";
+import {
+  getCategoryIconByKey,
+  getCategoryColorByKey,
+  availableGoalIcons,
+} from "@/lib/category-icons";
 import { cn } from "@/lib/utils";
 import { useCreateGoal, useUpdateGoal } from "../hooks";
 import type { Goal } from "../hooks";
@@ -120,11 +124,11 @@ export function GoalFormDialog({ goal, trigger }: GoalFormDialogProps) {
                   className={cn(
                     "flex size-9 items-center justify-center rounded-kubo-sm border transition-colors duration-200",
                     icon === key
-                      ? "border-accent bg-accent/15 text-accent"
+                      ? "border-accent bg-accent/15"
                       : "border-border bg-surface-hover text-muted hover:text-foreground"
                   )}
                 >
-                  <Icon className="size-4" />
+                  <Icon className={cn("size-4", icon === key && getCategoryColorByKey(key))} />
                 </button>
               );
             })}

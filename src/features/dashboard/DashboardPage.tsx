@@ -52,46 +52,55 @@ export function DashboardPage() {
         <BudgetAlertBanner />
       </div>
 
-      <div className="mt-8 grid animate-fade-up gap-6 px-6 md:grid-cols-3 md:px-10">
-        <div className="md:col-span-2">
-          <BalanceCard
-            balance={stats.balance}
-            income={stats.monthIncome}
-            expense={stats.monthExpense}
-          />
+      {/*
+        Desktop: dos columnas independientes (izquierda: balance + tendencia,
+        derecha: tarjetas + actividad), así ninguna fila se estira por la
+        altura de la otra y no queda un hueco bajo el balance.
+        Móvil: los wrappers usan `contents` y los bloques se reordenan con
+        `order`, manteniendo el orden Balance → tarjetas → gráfico → actividad.
+      */}
+      <div className="mt-8 grid animate-fade-up gap-6 px-6 pb-10 md:grid-cols-3 md:px-10">
+        <div className="contents md:col-span-2 md:flex md:flex-col md:gap-6">
+          <div className="order-1 md:order-none">
+            <BalanceCard
+              balance={stats.balance}
+              income={stats.monthIncome}
+              expense={stats.monthExpense}
+            />
+          </div>
+          <div className="order-3 md:order-none">
+            <SpendingChart data={stats.trend} />
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-1">
-          <StatCard
-            icon={PiggyBank}
-            label="Ahorro del mes"
-            value={Math.max(stats.monthIncome - stats.monthExpense, 0)}
-            helper="Ingresos menos gastos de este mes"
-          />
-          <StatCard
-            icon={TrendingDown}
-            label="Mayor gasto del mes"
-            value={stats.topCategory?.amount ?? 0}
-            helper={stats.topCategory ? stats.topCategory.name : "Sin gastos este mes"}
-            tone="negative"
-          />
-        </div>
-      </div>
 
-      <div className="mt-6 grid gap-6 px-6 pb-10 md:grid-cols-3 md:px-10">
-        <div className="md:col-span-2">
-          <SpendingChart data={stats.trend} />
-        </div>
-        <div className="flex flex-col gap-3">
-          <TransactionList transactions={transactions.slice(0, 6)} />
-          {transactions.length > 0 && (
-            <Link
-              to="/transacciones"
-              className="flex items-center justify-center gap-1.5 rounded-kubo-sm border border-border py-2.5 text-sm font-medium text-muted transition-all duration-200 hover:border-accent/30 hover:bg-surface-hover hover:text-foreground"
-            >
-              Ver todas las transacciones
-              <ArrowRight className="size-3.5" />
-            </Link>
-          )}
+        <div className="contents md:flex md:flex-col md:gap-6">
+          <div className="order-2 grid grid-cols-2 gap-6 md:order-none md:grid-cols-1">
+            <StatCard
+              icon={PiggyBank}
+              label="Ahorro del mes"
+              value={Math.max(stats.monthIncome - stats.monthExpense, 0)}
+              helper="Ingresos menos gastos de este mes"
+            />
+            <StatCard
+              icon={TrendingDown}
+              label="Mayor gasto del mes"
+              value={stats.topCategory?.amount ?? 0}
+              helper={stats.topCategory ? stats.topCategory.name : "Sin gastos este mes"}
+              tone="negative"
+            />
+          </div>
+          <div className="order-4 flex flex-col gap-3 md:order-none">
+            <TransactionList transactions={transactions.slice(0, 6)} />
+            {transactions.length > 0 && (
+              <Link
+                to="/transacciones"
+                className="flex items-center justify-center gap-1.5 rounded-kubo-sm border border-border py-2.5 text-sm font-medium text-muted transition-all duration-200 hover:border-accent/30 hover:bg-surface-hover hover:text-foreground"
+              >
+                Ver todas las transacciones
+                <ArrowRight className="size-3.5" />
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 

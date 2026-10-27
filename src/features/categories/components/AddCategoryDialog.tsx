@@ -8,7 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { FormDialogShell } from "@/components/ui/form-dialog-shell";
 import { useCreateCategory } from "../hooks";
-import { availableCategoryIcons, getCategoryIconByKey } from "@/lib/category-icons";
+import {
+  availableCategoryIcons,
+  getCategoryIconByKey,
+  getCategoryColorByKey,
+} from "@/lib/category-icons";
 import { cn } from "@/lib/utils";
 
 const schema = z.object({
@@ -88,9 +92,10 @@ export function AddCategoryDialog() {
 
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-medium text-muted">Ícono</label>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid max-h-48 grid-cols-6 gap-2 overflow-y-auto p-1">
             {availableCategoryIcons.map((icon) => {
               const Icon = getCategoryIconByKey(icon);
+              const isSelected = selectedIcon === icon;
               return (
                 <button
                   key={icon}
@@ -98,12 +103,12 @@ export function AddCategoryDialog() {
                   onClick={() => setValue("icon", icon)}
                   className={cn(
                     "flex size-9 items-center justify-center rounded-kubo-sm border transition-colors duration-200",
-                    selectedIcon === icon
-                      ? "border-accent bg-accent/15 text-accent"
+                    isSelected
+                      ? "border-accent bg-accent/15"
                       : "border-border bg-surface-hover text-muted hover:text-foreground"
                   )}
                 >
-                  <Icon className="size-4" />
+                  <Icon className={cn("size-4", isSelected && getCategoryColorByKey(icon))} />
                 </button>
               );
             })}
