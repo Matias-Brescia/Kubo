@@ -53,28 +53,28 @@ export function DashboardPage() {
       </div>
 
       {/*
-        Desktop: dos columnas independientes (izquierda: balance + tendencia,
+        lg+: dos columnas independientes (izquierda: balance + tendencia,
         derecha: tarjetas + actividad), así ninguna fila se estira por la
         altura de la otra y no queda un hueco bajo el balance.
-        Móvil: los wrappers usan `contents` y los bloques se reordenan con
+        Menos de lg: los wrappers usan `contents` y los bloques se reordenan con
         `order`, manteniendo el orden Balance → tarjetas → gráfico → actividad.
       */}
-      <div className="mt-8 grid animate-fade-up gap-6 px-6 pb-10 md:grid-cols-3 md:px-10">
-        <div className="contents md:col-span-2 md:flex md:flex-col md:gap-6">
-          <div className="order-1 md:order-none">
+      <div className="mt-6 grid animate-fade-up gap-4 px-6 pb-10 md:mt-8 md:gap-6 md:px-10 lg:grid-cols-3">
+        <div className="contents lg:col-span-2 lg:flex lg:flex-col lg:gap-6">
+          <div className="order-1 lg:order-none">
             <BalanceCard
               balance={stats.balance}
               income={stats.monthIncome}
               expense={stats.monthExpense}
             />
           </div>
-          <div className="order-3 md:order-none">
+          <div className="order-3 lg:order-none">
             <SpendingChart data={stats.trend} />
           </div>
         </div>
 
-        <div className="contents md:flex md:flex-col md:gap-6">
-          <div className="order-2 grid grid-cols-2 gap-6 md:order-none md:grid-cols-1">
+        <div className="contents lg:flex lg:flex-col lg:gap-6">
+          <div className="order-2 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6 lg:order-none lg:grid-cols-1">
             <StatCard
               icon={PiggyBank}
               label="Ahorro del mes"
@@ -89,7 +89,7 @@ export function DashboardPage() {
               tone="negative"
             />
           </div>
-          <div className="order-4 flex flex-col gap-3 md:order-none">
+          <div className="order-4 flex flex-col gap-3 lg:order-none">
             <TransactionList transactions={transactions.slice(0, 6)} />
             {transactions.length > 0 && (
               <Link

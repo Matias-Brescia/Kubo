@@ -2,7 +2,8 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CalendarDays, ChevronDown, Loader2, Plus } from "lucide-react";
+import { CalendarDays, ChevronDown, Loader2 } from "lucide-react";
+import { ActionButton } from "@/components/ui/action-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -121,12 +122,7 @@ export function TransactionFormDialog({ transaction, trigger }: TransactionFormD
         }
       }}
       trigger={
-        trigger ?? (
-          <Button size="lg">
-            <Plus className="size-4" />
-            Registrar movimiento
-          </Button>
-        )
+        trigger ?? <ActionButton label="Registrar movimiento" />
       }
       title={isEditing ? "Editar movimiento" : "Nuevo movimiento"}
     >

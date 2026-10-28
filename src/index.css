@@ -9,6 +9,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  /*
+   * Monto que nunca desborda su contenedor (ver AnimatedCurrency `fit`).
+   * .fit-container mide el ancho disponible; .fit-amount calcula el tamaño
+   * de fuente que hace caber `--chars` caracteres monoespaciados en ese ancho
+   * (ancho de carácter de Geist Mono ≈ 0.6em; 0.62 deja un pequeño margen).
+   * `1em` es el tamaño que fija el contenedor (text-3xl, etc.) y actúa como
+   * máximo, así que los montos normales se ven igual que antes. Si el
+   * navegador no soporta unidades `cqw`, la declaración se descarta y queda
+   * el tamaño máximo (el comportamiento anterior).
+   */
+  .fit-container {
+    container-type: inline-size;
+  }
+  .fit-amount {
+    font-size: min(1em, calc(100cqw / (var(--chars, 12) * 0.62)));
+    white-space: nowrap;
+  }
+}
+
 :root {
   /* Neutral base colors */
   --bg: 228 10% 6%;

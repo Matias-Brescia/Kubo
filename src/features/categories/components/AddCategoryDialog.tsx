@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { ActionButton } from "@/components/ui/action-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -60,12 +61,7 @@ export function AddCategoryDialog() {
         setOpen(next);
         if (!next) reset({ name: "", kind: "expense", icon: availableCategoryIcons[0] });
       }}
-      trigger={
-        <Button>
-          <Plus className="size-4" />
-          Nueva categoría
-        </Button>
-      }
+      trigger={<ActionButton label="Nueva categoría" />}
       title="Nueva categoría"
     >
       <form onSubmit={handleSubmit(onSubmit)} className="mt-5 flex flex-col gap-4">

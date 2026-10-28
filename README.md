@@ -87,15 +87,17 @@ pnpm preview
 
 > **Nota:** si abres el proyecto sin configurar `.env`, Kubo muestra una pantalla con instrucciones en vez de fallar en blanco.
 
-## Novedades de esta versión — v0.5.3
+## Novedades de esta versión — v0.5.4
 
-Versión visual y de layout. Sin cambios de datos ni de Supabase, sin cambios de lógica.
+Versión de pulido móvil y robustez. Sin cambios de datos ni de Supabase, sin cambios de lógica de negocio.
 
-- **Dashboard sin hueco en desktop** — el gráfico de Tendencia sube bajo el Balance; las tarjetas de Ahorro/Mayor gasto y la Actividad reciente forman la columna derecha. En móvil se conserva el orden de siempre
-- **Más íconos** — de 15 a 65, agrupados por tema (comida, transporte, hogar, salud, ocio, educación, compras, trabajo y dinero, viajes, mascotas). El color de cada ícono lo asigna la paleta existente; al elegirlo en el selector se ve el color que tendrá. Las metas pasan de 10 a 15 íconos
-- **Layout móvil** — la página vuelve al scroll normal en móvil (la barra del navegador puede colapsar y no se corta el final); la altura fija con sidebar sticky se mantiene en desktop
-- **Íconos centralizados** — una sola tabla ícono → componente → color reemplaza los dos mapas paralelos
-- **Comportamiento intencional** — las Metas no se suman al saldo: los aportes solo actualizan la meta. Es una decisión de producto, no un bug
+- **Montos que no se salen** — los montos del Dashboard y Reportes ajustan su tamaño al ancho real de la tarjeta y a la cantidad de dígitos (solo CSS). Con montos normales en desktop se ven igual que antes
+- **Móvil más compacto** — el botón principal de cada pantalla ("Registrar movimiento", "Nueva meta"...) se reduce a un botón con "+" en pantallas pequeñas; Topbar, tarjetas del Dashboard y filas de Transacciones con menos espacio vacío
+- **Dashboard en tablets y ventanas medianas** — las dos columnas ahora empiezan en `lg` (antes `md`, donde la columna derecha quedaba de ~130px)
+- **Pantalla de error propia** — si algo falla al renderizar, Kubo muestra un mensaje con "Recargar" e "Ir al inicio" en vez de una pantalla en blanco o genérica
+- **Recarga tras un despliegue** — si una pestaña abierta pide una página que ya no existe por una versión nueva, se recarga una vez automáticamente
+- **`vercel.json`** — reescribe cualquier ruta a `index.html` para que recargar en `/transacciones`, `/metas`, etc. no dé 404 en Vercel
+- Fecha de los grupos en Transacciones: solo la primera letra en mayúscula ("Sábado, 3 de octubre")
 - Ver `CHANGELOG.md` para el detalle
 
 ## Próximas entregas

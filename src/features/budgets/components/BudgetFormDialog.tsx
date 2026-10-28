@@ -2,7 +2,8 @@ import { useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { ActionButton } from "@/components/ui/action-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -73,12 +74,7 @@ export function BudgetFormDialog({ budget, usedCategoryIds = [], trigger }: Budg
         if (!next) reset({ categoryId: budget?.categoryId ?? "", monthlyAmount: budget?.monthlyAmount ?? 0 });
       }}
       trigger={
-        trigger ?? (
-          <Button size="lg">
-            <Plus className="size-4" />
-            Nuevo presupuesto
-          </Button>
-        )
+        trigger ?? <ActionButton label="Nuevo presupuesto" />
       }
       title={isEditing ? "Editar presupuesto" : "Nuevo presupuesto"}
     >

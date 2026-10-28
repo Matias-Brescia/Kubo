@@ -13,7 +13,7 @@ interface StatCardProps {
 
 export function StatCard({ icon: Icon, label, value, helper, tone = "accent" }: StatCardProps) {
   return (
-    <Card className="p-6">
+    <Card className="p-4 sm:p-6">
       <div className="flex items-center gap-3">
         <div
           className={cn(
@@ -25,8 +25,12 @@ export function StatCard({ icon: Icon, label, value, helper, tone = "accent" }: 
         </div>
         <p className="text-sm font-medium text-foreground">{label}</p>
       </div>
-      <AnimatedCurrency value={value} className="mt-4 text-3xl font-semibold" />
-      {helper && <p className="mt-3 text-xs text-muted">{helper}</p>}
+      <AnimatedCurrency
+        value={value}
+        fit
+        className="mt-3 text-2xl font-semibold sm:mt-4 sm:text-3xl"
+      />
+      {helper && <p className="mt-2 text-xs text-muted sm:mt-3">{helper}</p>}
     </Card>
   );
 }

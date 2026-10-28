@@ -12,7 +12,7 @@ interface BalanceCardProps {
 
 export function BalanceCard({ balance, income, expense }: BalanceCardProps) {
   return (
-    <Card className="relative overflow-hidden p-6 md:p-8" variant="elevated">
+    <Card className="relative overflow-hidden p-5 sm:p-6 md:p-8" variant="elevated">
       {/* Gradiente sutil que no distrae del contenido */}
       <div
         aria-hidden
@@ -33,11 +33,12 @@ export function BalanceCard({ balance, income, expense }: BalanceCardProps) {
       >
         <AnimatedCurrency
           value={balance}
+          fit
           className="text-4xl font-semibold tracking-tight md:text-5xl"
         />
       </motion.div>
 
-      <div className="mt-6 flex flex-wrap gap-3">
+      <div className="mt-5 grid gap-2 sm:mt-6 sm:flex sm:flex-wrap sm:gap-3">
         <Metric icon={ArrowUpRight} label="Ingresos del mes" value={income} tone="accent" />
         <Metric icon={ArrowDownRight} label="Gastos del mes" value={expense} tone="negative" />
       </div>
@@ -57,7 +58,7 @@ function Metric({
   tone: "accent" | "negative";
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-kubo-sm border border-border bg-surface-hover px-4 py-3">
+    <div className="flex w-full items-center gap-3 rounded-kubo-sm border border-border bg-surface-hover px-3 py-2.5 sm:w-auto sm:px-4 sm:py-3">
       <div
         className={cn(
           "flex size-8 shrink-0 items-center justify-center rounded-full",
@@ -66,9 +67,10 @@ function Metric({
       >
         <Icon className="size-4" />
       </div>
-      <div>
-        <p className="text-xs text-muted">{label}</p>
-        <AnimatedCurrency value={value} className="text-sm font-semibold" />
+      {/* Móvil: etiqueta a la izquierda y monto a la derecha, en una sola línea. */}
+      <div className="flex min-w-0 flex-1 items-center justify-between gap-3 sm:block sm:flex-none">
+        <p className="truncate text-xs text-muted">{label}</p>
+        <AnimatedCurrency value={value} className="shrink-0 text-sm font-semibold" />
       </div>
     </div>
   );

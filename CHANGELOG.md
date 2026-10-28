@@ -4,6 +4,23 @@ Historial de versiones del proyecto, de la más reciente a la más antigua. Cada
 
 ---
 
+## v0.5.4
+
+Pulido móvil y robustez. Sin migración de Supabase, sin cambios de lógica de negocio.
+
+- **Corregido**: los montos de las tarjetas se salían del cuadro. El tamaño de fuente era fijo (`text-3xl`) y en móvil la tarjeta de 2 columnas dejaba ~111px de ancho útil, así que se salía cualquier monto (incluso `S/ 1,000.00`); lo mismo ocurría en tablets y ventanas de ~1000px. Nuevo `fit` en `AnimatedCurrency` (unidades `cqw` + clases `.fit-container`/`.fit-amount` en `index.css`): la fuente baja lo necesario para que quepan `--chars` caracteres de Geist Mono (0.6em por carácter, verificado contra el archivo de fuente), con el tamaño original como máximo. Aplicado a `StatCard` (Dashboard y Reportes) y al monto de `BalanceCard`
+- **Agregado**: `components/ui/action-button.tsx`. El botón principal de cada Topbar (Registrar movimiento, Nuevo presupuesto, Nueva meta, Nuevo recurrente, Nueva categoría) pasa a un botón cuadrado con "+" por debajo de `sm`; el texto queda para lectores de pantalla. Reemplaza 5 copias del mismo botón. "Nueva categoría" pasa de tamaño normal a `lg` como los demás
+- **Simplificado**: en móvil, Topbar más baja y con título más chico; `StatCard` a una columna con menos padding; las métricas de ingresos/gastos del Balance en filas de una línea; filas de Transacciones con menos padding
+- **Corregido**: en Transacciones los botones Editar/Eliminar, invisibles (`opacity-0`), ocupaban ~84px a la derecha de cada fila en móvil y recibían toques estando ocultos. Ahora no reciben toques hasta mostrarse (hover o toque en la fila), en móvil se superponen en vez de ocupar espacio, y también aparecen con foco de teclado
+- **Corregido**: el layout de dos columnas del Dashboard empezaba en `md` (768px), donde la columna derecha medía ~130px; ahora empieza en `lg`
+- **Corregido**: encabezados de fecha en Transacciones con cada palabra en mayúscula ("3 De Octubre") por `capitalize`; ahora `first-letter:uppercase`
+- **Agregado**: `ErrorBoundary` global (`components/shared/ErrorBoundary.tsx`) con pantalla propia y botones "Recargar" / "Ir al inicio"
+- **Agregado**: en `main.tsx`, recarga única ante `vite:preloadError` (pestaña abierta que pide un chunk que ya no existe tras un despliegue), con límite de 10 s para evitar bucles
+- **Agregado**: `vercel.json` con rewrite a `index.html`. El proyecto no incluía configuración de despliegue; sin ese rewrite, recargar en una ruta distinta de `/` puede dar 404 en Vercel
+- **Organización**: `package.json` a `0.5.4`; README sincronizado
+
+> **Riesgos conocidos:** (1) los cambios de layout no se pudieron verificar visualmente en navegador al construirlos; (2) la causa exacta del error al recargar no está confirmada (no existía ninguna pantalla de error propia en el código); si persiste, se necesita el texto del error; (3) si el repositorio ya tiene un `vercel.json`, conviene fusionarlo en vez de reemplazarlo; (4) los botones Editar/Eliminar de Presupuestos, Metas y Categorías siguen con el patrón antiguo `opacity-0` (pendiente).
+
 ## v0.5.3
 
 Versión visual y de layout. Sin migración de Supabase, sin cambios de lógica de negocio.

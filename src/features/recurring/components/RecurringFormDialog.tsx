@@ -2,7 +2,8 @@ import { useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { ActionButton } from "@/components/ui/action-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -78,12 +79,7 @@ export function RecurringFormDialog({ trigger }: { trigger?: ReactNode }) {
         if (!next) setKind("expense");
       }}
       trigger={
-        trigger ?? (
-          <Button size="lg">
-            <Plus className="size-4" />
-            Nuevo recurrente
-          </Button>
-        )
+        trigger ?? <ActionButton label="Nuevo recurrente" />
       }
       title="Nuevo recurrente"
     >

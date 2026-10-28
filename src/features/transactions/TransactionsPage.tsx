@@ -68,7 +68,7 @@ export function TransactionsPage() {
               <div key={date}>
                 {/* Separador de fecha */}
                 <div className="mb-2 flex items-center gap-3">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted capitalize">
+                  <p className="text-xs font-semibold tracking-wider text-muted first-letter:uppercase">
                     {formatGroupDate(date)}
                   </p>
                   <div className="h-px flex-1 bg-border" />
@@ -84,7 +84,7 @@ export function TransactionsPage() {
                           <li
                             key={tx.id}
                             className={cn(
-                              "group flex items-center gap-3 px-5 py-3.5 transition-colors duration-200 hover:bg-surface-hover/50",
+                              "group relative flex items-center gap-3 px-4 py-3 transition-colors duration-200 hover:bg-surface-hover/50 md:px-5 md:py-3.5",
                               i !== txs!.length - 1 && "border-b border-border"
                             )}
                           >
@@ -107,7 +107,13 @@ export function TransactionsPage() {
                             >
                               {formatSignedCurrency(tx.kind === "income" ? tx.amount : -tx.amount)}
                             </p>
-                            <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                            {/*
+                              Acciones: ocultas hasta pasar el mouse o tocar la fila. Mientras están
+                              ocultas no reciben toques ni ocupan espacio en móvil (se superponen
+                              a la derecha de la fila al revelarse), y también aparecen con foco de
+                              teclado (no con foco por mouse, para que no queden fijos tras cerrar un diálogo).
+                            */}
+                            <div className="pointer-events-none flex shrink-0 items-center gap-1 opacity-0 transition-opacity duration-200 has-[:focus-visible]:pointer-events-auto has-[:focus-visible]:opacity-100 group-hover:pointer-events-auto group-hover:opacity-100 max-md:absolute max-md:right-2 max-md:top-1/2 max-md:-translate-y-1/2 max-md:rounded-kubo-sm max-md:bg-surface max-md:p-0.5 max-md:shadow-kubo">
                               <TransactionFormDialog
                                 transaction={tx}
                                 trigger={
