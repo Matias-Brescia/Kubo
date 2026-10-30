@@ -101,7 +101,10 @@ export function TransactionsPage() {
                             </div>
                             <p
                               className={cn(
-                                "shrink-0 font-mono text-sm font-semibold tabular-nums",
+                                "shrink-0 font-mono text-sm font-semibold tabular-nums transition-opacity duration-200",
+                                // En móvil las acciones se superponen al monto: mientras se ven, el monto se oculta
+                                // por completo (así nunca queda tapado a medias).
+                                "max-md:group-hover:opacity-0 max-md:group-has-[:focus-visible]:opacity-0",
                                 tx.kind === "income" ? "text-accent" : "text-foreground"
                               )}
                             >

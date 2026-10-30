@@ -4,6 +4,17 @@ Historial de versiones del proyecto, de la más reciente a la más antigua. Cada
 
 ---
 
+## v0.5.5
+
+Pulido menor. Sin migración de Supabase.
+
+- **Corregido**: con el rewrite de `vercel.json` (v0.5.4), una URL inexistente cargaba la app con el menú lateral y el contenido vacío, porque el router no tenía ruta de respaldo. Se agrega `<Route path="*">` con `<Navigate to="/" replace />` dentro del router protegido. Sin sesión iniciada, las URLs inexistentes siguen yendo a `/login`
+- **Cambiado**: en Transacciones, en móvil (< `md`), mientras se muestran los botones Editar/Eliminar (por toque o foco de teclado) el monto se oculta por completo (`opacity-0`) en lugar de quedar tapado a medias. Solo aplica por debajo de 768px; desktop sin cambios
+- **Agregado**: paso nuevo en el tutorial de bienvenida: "Edita o elimina un movimiento"
+- **Organización**: `package.json` a `0.5.5`; README sincronizado
+
+> **Notas:** (1) el tutorial solo se muestra a cuentas nuevas sin movimientos y una sola vez (`kubo:onboarding-seen:<userId>` en localStorage), por lo que no llega a usuarios existentes; (2) Presupuestos, Metas y Categorías conservan el patrón antiguo de botones invisibles (`opacity-0`), pendiente de unificar; (3) los cambios de layout no se verificaron visualmente en navegador al construirlos.
+
 ## v0.5.4
 
 Pulido móvil y robustez. Sin migración de Supabase, sin cambios de lógica de negocio.

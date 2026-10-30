@@ -87,17 +87,13 @@ pnpm preview
 
 > **Nota:** si abres el proyecto sin configurar `.env`, Kubo muestra una pantalla con instrucciones en vez de fallar en blanco.
 
-## Novedades de esta versión — v0.5.4
+## Novedades de esta versión — v0.5.5
 
-Versión de pulido móvil y robustez. Sin cambios de datos ni de Supabase, sin cambios de lógica de negocio.
+Pulido menor. Sin cambios de datos ni de Supabase.
 
-- **Montos que no se salen** — los montos del Dashboard y Reportes ajustan su tamaño al ancho real de la tarjeta y a la cantidad de dígitos (solo CSS). Con montos normales en desktop se ven igual que antes
-- **Móvil más compacto** — el botón principal de cada pantalla ("Registrar movimiento", "Nueva meta"...) se reduce a un botón con "+" en pantallas pequeñas; Topbar, tarjetas del Dashboard y filas de Transacciones con menos espacio vacío
-- **Dashboard en tablets y ventanas medianas** — las dos columnas ahora empiezan en `lg` (antes `md`, donde la columna derecha quedaba de ~130px)
-- **Pantalla de error propia** — si algo falla al renderizar, Kubo muestra un mensaje con "Recargar" e "Ir al inicio" en vez de una pantalla en blanco o genérica
-- **Recarga tras un despliegue** — si una pestaña abierta pide una página que ya no existe por una versión nueva, se recarga una vez automáticamente
-- **`vercel.json`** — reescribe cualquier ruta a `index.html` para que recargar en `/transacciones`, `/metas`, etc. no dé 404 en Vercel
-- Fecha de los grupos en Transacciones: solo la primera letra en mayúscula ("Sábado, 3 de octubre")
+- **URLs inexistentes** — cualquier ruta que no exista (por ejemplo `/blabla`) te lleva al Dashboard en vez de mostrar el menú con el contenido vacío
+- **Transacciones en móvil** — al tocar una fila, el monto se oculta mientras se muestran los botones de editar y eliminar, para que nunca quede tapado a medias. En desktop no cambia nada
+- **Tutorial de bienvenida** — un paso nuevo y corto: cómo editar o eliminar un movimiento
 - Ver `CHANGELOG.md` para el detalle
 
 ## Próximas entregas

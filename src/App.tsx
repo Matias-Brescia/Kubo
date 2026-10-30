@@ -1,5 +1,5 @@
 import { Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { ThemeProvider } from "./app/providers/ThemeProvider";
@@ -80,6 +80,8 @@ function App() {
                             <Route path="/metas" element={<GoalsPage />} />
                             <Route path="/reportes" element={<ReportsPage />} />
                             <Route path="/ajustes" element={<SettingsPage />} />
+                            {/* Cualquier URL que no exista lleva al Dashboard. */}
+                            <Route path="*" element={<Navigate to="/" replace />} />
                           </Routes>
                         </Suspense>
                       </AppShell>

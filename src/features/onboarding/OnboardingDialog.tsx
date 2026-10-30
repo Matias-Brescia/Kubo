@@ -1,5 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { ArrowLeftRight, PiggyBank, Target, X } from "lucide-react";
+import { ArrowLeftRight, Pencil, PiggyBank, Target, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/layout/Logo";
 
@@ -9,6 +9,11 @@ const steps = [
     title: "Ya tienes categorías listas",
     description:
       "Creamos categorías comunes de ingresos y gastos para que empieces a registrar movimientos de inmediato.",
+  },
+  {
+    icon: Pencil,
+    title: "Edita o elimina un movimiento",
+    description: "Pasa el mouse sobre él para ver los botones; en el celular, tócalo.",
   },
   {
     icon: PiggyBank,
